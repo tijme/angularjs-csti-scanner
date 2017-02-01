@@ -1,6 +1,8 @@
 # AngularJS sandbox escape/bypass scanner
 *Automated client-side template injection detection for AngularJS!*
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+
 ## Dependencies
 * Python 3: https://www.python.org/downloads/
 * BeautifulSoup: `pip install -U beautifulsoup4`
