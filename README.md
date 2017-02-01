@@ -1,4 +1,7 @@
 # AngularJS sandbox escape/bypass scanner
+
+**Under development**
+
 *Automated client-side template injection detection for AngularJS!*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
