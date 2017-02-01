@@ -2,6 +2,7 @@
 *Automated client-side template injection detection for AngularJS!*
 
 ## Dependencies
+* Python 3: https://www.python.org/downloads/
 * BeautifulSoup: `pip install -U beautifulsoup4`
 * Selenium: `pip install -U selenium`
 
