@@ -16,7 +16,9 @@
 ### Examples
 
 **Simple check:**
+
 `python angular.py --url="http://example.ltd/"`
 
 **Also use a JavaScript engine to ensure the alert really pops:**
+
 `python angular.py --url="http://example.ltd/" --javascript-engine`
