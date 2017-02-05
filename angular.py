@@ -24,10 +24,10 @@
 
 from classes.Crawler import Crawler
 from classes.Exploit import Exploit
+from classes.Logging import Logging
 from classes.Scraper import Scraper
 from colorama import init, Fore, Back, Style
 
-import datetime
 import sys 
 import getopt
 
@@ -95,32 +95,37 @@ def parse_options(argv):
 Run scanner
 """
 def main(argv):
+    # Get the CLI arguments
     (input_uri, input_verify_exploit, input_use_url_crawler, input_quit_if_vulnerable) = parse_options(argv)
 
-    print(str(datetime.datetime.now()) + ": Starting scan");
+    Logging.info("Started scan");
 
+    # Get website details, like the AngularJS version
     website_details = Scraper.get_instance().get_details(input_uri);
 
+    # Verify the website uses AngularJS
     if not website_details["uses_angular"]:
         print(Fore.RED + Back.BLACK + "This website does not use AngularJS.")
         sys.exit()
 
-    print(str(datetime.datetime.now()) + ": Found AngularJS version " + website_details["angular_version"])
+    Logging.info("Found AngularJS version " + website_details["angular_version"])
 
+    # Get the URI's to check
     urls = [input_uri]
     vulnerable_urls = []
 
     if input_use_url_crawler:
-        print(str(datetime.datetime.now()) + ": Crawling...")
+        Logging.info("Started crawler...")
         urls = Crawler.get_instance().get_urls(input_uri)
-        print(str(datetime.datetime.now()) + ": Finished crawling")
+        Logging.info("Finished crawling")
 
-    print(str(datetime.datetime.now()) + ": Going to test {} URI(s)".format(len(urls)))
+    Logging.info("Going to test {} URI(s)".format(len(urls)))
 
+    # Test the exploit on every URI
     exploit = Exploit.get_instance()
 
     for index, url in enumerate(urls):
-        print(str(datetime.datetime.now()) + ": Testing URI {}/{}: {}".format(index + 1, len(urls), url))
+        Logging.info("Testing URI {}/{}: {}".format(index + 1, len(urls), url))
 
         result = exploit.is_vulnerable(url, website_details["angular_version"], input_verify_exploit)
 
@@ -130,10 +135,11 @@ def main(argv):
         if result is not False and input_quit_if_vulnerable:
             break
 
-    print(str(datetime.datetime.now()) + ": Found {} vulnerable URI's".format(len(vulnerable_urls)))
+    # Log the results
+    Logging.info("Found {} vulnerable URI's".format(len(vulnerable_urls)))
 
     for index, vulnerable_url in enumerate(vulnerable_urls):
-        print(Fore.RED + Back.BLACK + str(datetime.datetime.now()) + ": Vulnerable URI: {}".format(vulnerable_url))
+        Logging.red("Vulnerable URI: {}".format(vulnerable_url))
 
 """
 Start with main method
