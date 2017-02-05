@@ -1,7 +1,13 @@
 # AngularJS sandbox escape/bypass scanner
+
+**Under development**
+
 *Automated client-side template injection (CSTI) detection for AngularJS!*
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+
 ## Dependencies
+* Python 3: https://www.python.org/downloads/
 * BeautifulSoup: `pip install -U beautifulsoup4`
 * Selenium: `pip install -U selenium`
 * Colorama: `pip install -U colorama`
