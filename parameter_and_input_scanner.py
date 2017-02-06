@@ -19,10 +19,10 @@ def print_parameter_tabel(parameters):
     for number,item  in enumerate(items):
         name=item
         name += str(" " * int(29- len(name[0])))+ "|" 
-        print("+" +           "-"  *  32 +            "+"  )
-        print(str (     "|" + str(number)+  ") " + "".join(name))  )
+        print("+" + "-"  *  32 + "+"  )
+        print(str ("|" + str(number)+  ") " + "".join(name))  )
 
-    print("+" +           "-"  *  32 +            "+"  )
+    print("+" + "-"  *  32 + "+"  )
        
 
 def correct_hypertext_scheme(site):
