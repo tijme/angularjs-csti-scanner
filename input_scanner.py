@@ -36,7 +36,7 @@ def correct_hypertext_scheme(site):
         
     finalurl = urlparse.urlparse(site)
     domain = '{uri.scheme}://{uri.netloc}/'.format(uri=finalurl)
-    print(domain)
+    
         
 
 def find_parameters(site): 
