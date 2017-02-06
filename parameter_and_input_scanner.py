@@ -100,7 +100,8 @@ parameterz = get_parameters(url_choise)
 
 def determine():
     if len(parameterz) > 0:
-        pass#Let's run the scanner!     
+        print("[+]Parameters found!")
+        print_url_parameter_tabel(parameterz)
     else:
         find_parameters(url_choise)   
     
