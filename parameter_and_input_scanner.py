@@ -16,7 +16,7 @@ def print_parameter_tabel(parameters):
 
 
     items = parameters
-    for number,item  in enumerate(items):
+    for number,item  in enumerate(items, start=1):
         name=item
         name += str(" " * int(29- len(name[0])))+ "|" 
         print("+" + "-"  *  32 + "+"  )
@@ -84,7 +84,7 @@ def print_url_parameter_tabel(parameters): #Minimal difference with print_parame
 
 
     items = parameters
-    for number,item  in enumerate(items):
+    for number,item  in enumerate(items, start=1):
         name=item
         name += str(" " * int(29- len(name)))+ "|" 
         print("+" +           "-"  *  32 +            "+"  )
@@ -107,69 +107,3 @@ def determine():
     
 if __name__ == "__main__":
     determine()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
