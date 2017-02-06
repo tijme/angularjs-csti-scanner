@@ -11,6 +11,7 @@
 * BeautifulSoup: `pip install -U beautifulsoup4`
 * Selenium: `pip install -U selenium`
 * Colorama: `pip install -U colorama`
+* Html5Lib: `pip install -U html5lib`
 
 ## Usage
 
@@ -48,7 +49,9 @@
 
 1. Add a payload for AngularJS v1.3.0.
 2. Add a payload for AngularJS v1.5.9 to v1.5.11.
-3. Add the crawler functionality.
-4. Use Selenium headless.
-5. Add docblocks for all methods.
-6. Catch Selenium exceptions.
+3. Use Selenium headless (maybe using PhantomJS).
+4. Add docblocks for all methods.
+5. Add support for cookies and basic auth.
+6. Add support for custom user agents.
+7. Add support for POST forms/requests.
+8. Add support for SEO uri injection.

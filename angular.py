@@ -118,6 +118,7 @@ def main(argv):
         Logging.info("Started crawler...")
         urls = Crawler.get_instance().get_urls(input_uri)
         Logging.info("Finished crawling")
+        Logging.info("Found {} URI's".format(len(urls)))
 
     Logging.info("Going to test {} URI(s)".format(len(urls)))
 

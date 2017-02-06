@@ -42,11 +42,13 @@ class Selenium:
     def execute_js(self, url, command):
         browser = self.get_chrome_browser()
         browser.get(url)
-
-        response = browser.execute_script(command);
+            
+        try:
+            response = browser.execute_script(command);
+        except Exception:
+            response = None
 
         browser.close()
-
         return response
         
     """

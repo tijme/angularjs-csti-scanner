@@ -51,4 +51,10 @@ class Logging:
     def green(message):
         print(Fore.GREEN + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
 
+    """
+    Log yellow text with a black background to the console
+    """
+    def yellow(message):
+        print(Fore.YELLOW + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
+
     green = staticmethod(green)
