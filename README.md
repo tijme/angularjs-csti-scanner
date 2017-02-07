@@ -11,7 +11,6 @@
 * BeautifulSoup: `pip install -U beautifulsoup4`
 * Selenium: `pip install -U selenium`
 * Colorama: `pip install -U colorama`
-* Html5Lib: `pip install -U html5lib`
 
 ## Usage
 
