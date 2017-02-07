@@ -88,7 +88,7 @@ class Selenium:
         if platform == "linux" or platform == "linux2":
             return path + "/../chrome_drivers/chromedriver_linux" + x
         elif platform == "darwin":
-            return path + "/../chrome_drivers/chromedriver_max64"
+            return path + "/../chrome_drivers/chromedriver_mac64"
         elif platform == "win32":
             return path + "/../chrome_drivers/chromedriver_win32"
 
