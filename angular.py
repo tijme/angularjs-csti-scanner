@@ -118,7 +118,7 @@ def main(argv):
         Logging.info("Started crawler...")
         urls = Crawler.get_instance().get_urls(input_uri)
         Logging.info("Finished crawling")
-        Logging.info("Found {} URI's".format(len(urls)))
+        Logging.info("Found {} URI(s)".format(len(urls)))
 
     Logging.info("Going to test {} URI(s)".format(len(urls)))
 
@@ -137,7 +137,7 @@ def main(argv):
             break
 
     # Log the results
-    Logging.info("Found {} vulnerable URI's".format(len(vulnerable_urls)))
+    Logging.info("Found {} vulnerable URI(s)".format(len(vulnerable_urls)))
 
     for index, vulnerable_url in enumerate(vulnerable_urls):
         Logging.red("Vulnerable URI: {}".format(vulnerable_url))

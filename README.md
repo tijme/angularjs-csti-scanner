@@ -55,3 +55,4 @@
 6. Add support for custom user agents.
 7. Add support for POST forms/requests.
 8. Add support for SEO uri injection.
+9. Refactor the crawler.

@@ -48,10 +48,10 @@ class Crawler:
         soup = BeautifulSoup(contents, "html.parser")
 
         uris_by_href = self.find_uris_by_href(uri, soup)
-        found_uris= self.merge_uris_without_duplicates(found_uris, uris_by_href)
+        found_uris = self.merge_uris_without_duplicates(uri, found_uris, uris_by_href)        
 
         uris_by_forms = self.find_uris_by_forms(uri, soup)
-        found_uris= self.merge_uris_without_duplicates(found_uris, uris_by_forms)
+        found_uris = self.merge_uris_without_duplicates(uri, found_uris, uris_by_forms)
 
         found_uris.append(uri)
         found_uris.append(uri + "?canonical=check")
@@ -60,9 +60,15 @@ class Crawler:
         return found_uris
 
     """
+
+    """
+    def get_urls_r(self, uri):
+        
+
+    """
     
     """
-    def merge_uris_without_duplicates(self, existing_uris, new_uris):
+    def merge_uris_without_duplicates(self, uri, existing_uris, new_uris):
         for new_uri in new_uris:
             already_in = False
             for existing_uri in existing_uris:
@@ -70,10 +76,17 @@ class Crawler:
                     already_in = True
                     break
 
-            if not already_in:
+            if not already_in and self.get_hostname(uri) == self.get_hostname(new_uri):
                 existing_uris.append(new_uri)
 
         return existing_uris
+
+    """
+    Get the hostname of the given URL
+    """
+    def get_hostname(self, url):
+        parsed = urlparse(url)
+        return parsed.netloc
 
     """
     Get all the query params in the given URL
@@ -89,7 +102,10 @@ class Crawler:
         existing_uri_params = self.get_params(existing_uri)
         new_uri_params = self.get_params(new_uri)
 
-        if self.get_base(existing_uri) == self.get_base(new_uri) and len(existing_uri_params) == len(new_uri_params):
+        if self.get_base(existing_uri, True) != self.get_base(new_uri, True):
+            return False
+
+        if self.get_base(existing_uri, True) == self.get_base(new_uri, True) and len(existing_uri_params) == len(new_uri_params):
             return True
 
         param_keys_do_not_match = False
@@ -157,10 +173,13 @@ class Crawler:
     """
     
     """
-    def get_base(self, host):
-        host = host.split('?')[0]
+    def get_base(self, host, include_file=False):
+        if include_file:
+            host = host.split('?')[0]
+        else:
+            host = host.rsplit('/', 1)[0]
 
-        if host.endswith("/"):
+        if host.endswith("/") or include_file:
             return host
 
         return host + "/"
