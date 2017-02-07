@@ -23,6 +23,7 @@
 from urllib.parse import urlparse, urlencode, parse_qs, quote_plus
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from classes.Logging import Logging
 
 import sys 
 
@@ -37,21 +38,19 @@ class Crawler:
     _instance = None
 
     """
+    Keep track of all the crawled URI's
+    """
+    _uris = []
+
+    """
     
     """
     def get_urls(self, uri):
+        self.crawl_uris_recursively(uri)
+
         found_uris = []
-
-        # ToDo: Make this recursive until all uri's have been crawled.
-
-        contents = self.get_contents(uri)
-        soup = BeautifulSoup(contents, "html.parser")
-
-        uris_by_href = self.find_uris_by_href(uri, soup)
-        found_uris = self.merge_uris_without_duplicates(uri, found_uris, uris_by_href)        
-
-        uris_by_forms = self.find_uris_by_forms(uri, soup)
-        found_uris = self.merge_uris_without_duplicates(uri, found_uris, uris_by_forms)
+        for crawled_uri in self._uris:
+            found_uris.append(crawled_uri["uri"])
 
         found_uris.append(uri)
         found_uris.append(uri + "?canonical=check")
@@ -62,8 +61,36 @@ class Crawler:
     """
 
     """
-    def get_urls_r(self, uri):
-        
+    def crawl_uris_recursively(self, uri, force=False):
+        if self.has_crawled_uri(uri) and not force:
+            return
+
+        Logging.yellow("Crawling URL: {}".format(uri))
+
+        contents = self.get_contents(uri)
+        soup = BeautifulSoup(contents, "html.parser")
+
+        uris_by_href = self.find_uris_by_href(uri, soup)
+        self._uris = self.merge_uris_without_duplicates(uri, self._uris, uris_by_href)        
+
+        uris_by_forms = self.find_uris_by_forms(uri, soup)
+        self._uris = self.merge_uris_without_duplicates(uri, self._uris, uris_by_forms)
+
+        for crawled_uri in self._uris:
+            if crawled_uri["crawled"] is False:
+                crawled_uri["crawled"] = True
+                self.crawl_uris_recursively(crawled_uri["uri"], True)
+                break
+
+    """
+
+    """
+    def has_crawled_uri(self, uri):
+        for crawled_uri in self._uris:
+            if crawled_uri["uri"] == uri:
+                return True
+
+        return False
 
     """
     
@@ -72,12 +99,15 @@ class Crawler:
         for new_uri in new_uris:
             already_in = False
             for existing_uri in existing_uris:
-                if self.url_is_essentially_the_same(existing_uri, new_uri):
+                if self.url_is_essentially_the_same(existing_uri["uri"], new_uri):
                     already_in = True
                     break
 
             if not already_in and self.get_hostname(uri) == self.get_hostname(new_uri):
-                existing_uris.append(new_uri)
+                existing_uris.append({
+                    "uri": new_uri,
+                    "crawled": False
+                })
 
         return existing_uris
 
@@ -104,9 +134,6 @@ class Crawler:
 
         if self.get_base(existing_uri, True) != self.get_base(new_uri, True):
             return False
-
-        if self.get_base(existing_uri, True) == self.get_base(new_uri, True) and len(existing_uri_params) == len(new_uri_params):
-            return True
 
         param_keys_do_not_match = False
 
@@ -152,11 +179,46 @@ class Crawler:
     def find_uris_by_forms(self, host, soup):
         uris = []
 
-        # ToDo: add this functionality
-
-        # inputs = soup.findAll("input", {'type':'text'})
+        for form in soup.find_all("form"):
+            uris.append(self.find_uri_by_form(host, form))
 
         return uris
+
+    """
+    
+    """
+    def find_uri_by_form(self, host, form):
+        url = form.get("action")
+        if len(url) is 0:
+            url = host
+
+        url = self.make_absolute(host, url).split('?')[0] + "?a=b"
+
+        inpts = form.find_all("input", {"type": ["text", "hidden"]})
+        for inpt in inpts:
+            url = url + "&{}={}".format(inpt.get("name"), inpt.get("value"))
+
+        selects = form.find_all("select")
+        for select in selects:
+            name = select.get("name")
+            value = self.get_select_value(select)
+            url = url + "&{}={}".format(name, value)
+
+        return url
+
+    """
+    
+    """
+    def get_select_value(self, select):
+        selected = select.find("option", selected=True)
+        if selected is not None:
+            return selected.get("value")
+
+        first = select.find("option")
+        if first is not None:
+            return first.get("value")
+
+        return "not-found"
 
     """
     
