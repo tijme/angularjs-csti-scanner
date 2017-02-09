@@ -5,8 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
 ## Demo
-[![Demo](https://finnwea.com/snippets/angularjs-sandbox-escape-scanner.gif)](https://finnwea.com/snippets/angularjs-sandbox-escape-scanner.gif) 
-*Click for looped GIF*
+[![Demo](https://finnwea.com/snippets/angularjs-sandbox-escape-scanner-loop.gif)](https://finnwea.com/snippets/angularjs-sandbox-escape-scanner-loop.gif) 
 
 ## Installation
 
