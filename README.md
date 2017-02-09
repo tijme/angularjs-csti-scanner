@@ -17,7 +17,7 @@ Install [Python 3](https://www.python.org/downloads/) and the requirements.
 
 ### Options
 `python angular.py [options]`
-* `-u <uri>`,      `--uri=<uri>`              (required)        The hostname or URI to run the exploit on (e.g. https://www.example.ltd/?vulnerable=param).
+* `-u <uri>`,      `--uri=<uri>`              (required)        The URI to run the exploit on (e.g. https://www.example.ltd/?vulnerable=param).
 * `-v`,            `--verify`                 (optional)        Extra check by a JavaScript engine to ensure the payload is executed.
 * `-h`,            `--help`                   (optional)        Print this help message.
 
