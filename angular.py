@@ -48,8 +48,8 @@ def print_usage():
     print("Options:")
     print("-u <uri>,      --uri=<uri>              Required        The hostname or URL to run the exploit on (e.g. https://www.example.ltd/).")
     print("-v,            --verify                 Optional        Extra check by a JavaScript engine to ensure the payload is executed.")
-    print("-c,            --crawl                  Optional        Crawl & test all available URL's on the hostname of the given URL.")
-    print("-q,            --quit-if-vulnerable     Optional        Stop testing if a vulnerable URL was found.")
+    #print("-c,            --crawl                  Optional        Crawl & test all available URL's on the hostname of the given URL.")
+    #print("-q,            --quit-if-vulnerable     Optional        Stop testing if a vulnerable URL was found.")
     print("-h,            --help                   Optional        Print this help message.")
     print("")
 
