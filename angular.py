@@ -114,7 +114,8 @@ def main(argv):
     urls = [input_uri]
     vulnerable_urls = []
 
-    if input_use_url_crawler:
+    # TODO: remove the False when enabling the crawler.
+    if input_use_url_crawler and False:
         Logging.info("Started crawler...")
         urls = Crawler.get_instance().get_urls(input_uri)
         Logging.info("Finished crawling")
@@ -133,7 +134,8 @@ def main(argv):
         if result is not False:
             vulnerable_urls.append(result)
 
-        if result is not False and input_quit_if_vulnerable:
+        # TODO: remove the False when enabling the crawler.
+        if result is not False and input_quit_if_vulnerable and False:
             break
 
     # Log the results
