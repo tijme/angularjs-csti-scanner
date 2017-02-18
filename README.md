@@ -47,7 +47,6 @@ Install [Python 3](https://www.python.org/downloads/) and the requirements.
 
 1. Use Selenium headless (maybe using PhantomJS).
 2. Add support for cookies and basic auth.
-3. Add support for custom user agents.
-4. Add support for SEO url injection.
-5. Create the crawler (including support for POST requests).
-6. Document all code.
+3. Add support for SEO url injection.
+4. Implement [Not Your Average Web Crawler](https://github.com/tijme/not-your-average-web-crawler).
+5. Document all code.
