@@ -1,6 +1,6 @@
-# AngularJS sandbox escape/bypass scanner
+# AngularJS CSTI scanner
 
-*Automated client-side template injection (CSTI) detection for AngularJS!*
+*Automated client-side template injection (CSTI, sandbox escape) detection for AngularJS!*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
