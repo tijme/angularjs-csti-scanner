@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # MIT License
 # 
 # Copyright (c) 2017 Tijme Gommers
@@ -20,44 +22,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from classes.Selenium import Selenium
+from colorama import Fore, Back, Style
 
-"""
-Get details about a particular website (like the AngularJS version etc).
-"""
-class Scraper:
+import datetime
 
-    """
-    Keep track of the Scraper instance
-    """
-    _instance = None
+class Logging:
 
-    """
-    Keep track of the Scraper details
-    """
-    _details = {
-        "uses_angular": False,
-        "angular_version": None
-    }
+    @staticmethod
+    def info(message):
+        print(Back.BLACK + str(datetime.datetime.now()) + ": " + message);
 
-    """
-    
-    """
-    def get_details(self, uri):
-        angular_version = Selenium.get_instance().execute_js(uri, "return angular.version.full")
+    @staticmethod
+    def red(message):
+        print(Fore.RED + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
 
-        self._details["uses_angular"] = angular_version != None
-        self._details["angular_version"] = angular_version
+    @staticmethod
+    def green(message):
+        print(Fore.GREEN + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
 
-        return self._details
-
-    """
-    Get the Scraper instance
-    """
-    def get_instance():
-        if Scraper._instance == None:
-            Scraper._instance = Scraper()
-
-        return Scraper._instance
-
-    get_instance = staticmethod(get_instance)
+    @staticmethod
+    def yellow(message):
+        print(Fore.YELLOW + Back.BLACK + str(datetime.datetime.now()) + ": " + message);

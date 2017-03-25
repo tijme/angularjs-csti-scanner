@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # MIT License
 # 
 # Copyright (c) 2017 Tijme Gommers
@@ -20,41 +22,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from colorama import Fore, Back, Style
+from setuptools import find_packages, setup
 
-import datetime
+with open('requirements.txt') as file:
+    requirements = file.read().splitlines()
 
-"""
-A simple helper for logging messages to the console (including timestamp)
-"""
-class Logging:
-
-    """
-    Log white text with a black background to the console
-    """
-    def info(message):
-        print(Back.BLACK + str(datetime.datetime.now()) + ": " + message);
-
-    info = staticmethod(info)
-
-    """
-    Log red text with a black background to the console
-    """
-    def red(message):
-        print(Fore.RED + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
-
-    red = staticmethod(red)
-
-    """
-    Log green text with a black background to the console
-    """
-    def green(message):
-        print(Fore.GREEN + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
-
-    """
-    Log yellow text with a black background to the console
-    """
-    def yellow(message):
-        print(Fore.YELLOW + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
-
-    green = staticmethod(green)
+setup(
+    version="2.0.0",
+    name="acstis",
+    keywords = "angularjs xss xss-scanner exploit angularjs-sandbox-escape vulnerability-scanner",
+    description="Automated client-side template injection (CSTI, sandbox escape) detection for AngularJS!",
+    long_description="",
+    packages=find_packages(),
+    platforms=["any"],
+    author="Tijme Gommers",
+    author_email="tijme@finnwea.com",
+    license="MIT",
+    url="https://github.com/tijme/angular-csti-scanner",
+    install_requires=requirements
+)

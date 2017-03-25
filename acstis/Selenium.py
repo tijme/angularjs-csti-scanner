@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # MIT License
 # 
 # Copyright (c) 2017 Tijme Gommers
@@ -23,24 +25,16 @@
 from sys import platform
 from selenium import webdriver
 
+import urllib
+import json
 import os
 import ctypes
 
-"""
-The Selenium class handles everything that uses the JavaScript engine.
-"""
 class Selenium:
 
-    """
-    Keep track of the Selenium instance
-    """
-    _instance = None
-        
-    """
-    Execute the given JavaScript code and return the response
-    """
-    def execute_js(self, url, command):
-        browser = self.get_chrome_browser()
+    @staticmethod
+    def execute_js(url, command):
+        browser = Selenium.get_chrome_browser()
         browser.get(url)
             
         try:
@@ -48,39 +42,39 @@ class Selenium:
         except Exception:
             response = None
 
-        browser.close()
+        browser.quit()
         return response
-        
-    """
-    Check if the alert is really executed. Alerts could possibly not be executed because of the ngNonBindable attribute for example
-    """
-    def alert_is_popped(self, url):
-        browser = self.get_chrome_browser()
-        browser.get(url)
-        
+
+    @staticmethod
+    def alert_is_popped(queue_item):
+        browser = Selenium.get_chrome_browser()
+
+        if queue_item.request.method.upper() == "POST":
+            browser.get('about:blank')
+            browser.execute_script('window.doRequest=function(a,b,c){c=c||"post";var d=document.createElement("form");d.setAttribute("method",c),d.setAttribute("action",a),b=decodeURIComponent(b),b=JSON.parse(b);for(var e in b)if(b.hasOwnProperty(e)){var f=document.createElement("input");f.setAttribute("type","hidden"),f.setAttribute("name",e),f.setAttribute("value",b[e]),d.appendChild(f)}document.body.appendChild(d),d.submit()}')
+            browser.execute_script('window.doRequest("{}", `{}`, "{}");'.format(queue_item.request.url, urllib.parse.quote(json.dumps(queue_item.request.data)), queue_item.request.method));
+        else:
+            browser.get(queue_item.request.url)
+
         alert_is_popped = True
 
         try:
             alert = browser.switch_to_alert()
             alert.accept()
-        except:
+        except Exception as err:
             alert_is_popped = False
         
-        browser.close()
+        browser.quit()
 
         return alert_is_popped
 
-    """
-    Get the correct Chrome browser for this OS
-    """
-    def get_chrome_browser(self):
-        chromedriver = self.get_chrome_driver()
+    @staticmethod
+    def get_chrome_browser():
+        chromedriver = Selenium.get_chrome_driver()
         return webdriver.Chrome(chromedriver)
 
-    """
-    Get the correct Chrome driver for this OS
-    """
-    def get_chrome_driver(self):
+    @staticmethod
+    def get_chrome_driver():
         path = os.path.dirname(os.path.abspath(__file__))
         bits = ctypes.sizeof(ctypes.c_voidp)
         x = '32' if bits == 4 else '64'
@@ -91,14 +85,3 @@ class Selenium:
             return path + "/../chrome_drivers/chromedriver_mac64"
         elif platform == "win32":
             return path + "/../chrome_drivers/chromedriver_win32"
-
-    """
-    Get the Selenium instance
-    """
-    def get_instance():
-        if Selenium._instance == None:
-            Selenium._instance = Selenium()
-
-        return Selenium._instance
-
-    get_instance = staticmethod(get_instance)
