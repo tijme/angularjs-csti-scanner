@@ -9,7 +9,7 @@
 
 ## Installation
 
-Install [Python 3](https://www.python.org/downloads/) and the requirements.
+Install [Python 3.6](https://www.python.org/downloads/) and the requirements.
 
 `pip install -r requirements.txt`
 
@@ -37,16 +37,15 @@ Install [Python 3](https://www.python.org/downloads/) and the requirements.
 
 **Crawl the whole website and check all URI's for AngularJS sandbox escape:**
 
-~~`python angular.py --uri="http://example.ltd/" --crawl`~~ **(coming soon)**
+`python angular.py --uri="http://example.ltd/" --crawl`
 
 **Stop checking all the URI's if a vulnerable was found:**
 
-~~`python angular.py --uri="http://example.ltd/" --crawl --quit-if-vulnerable`~~ **(coming soon)**
+`python angular.py --uri="http://example.ltd/" --crawl --quit-if-vulnerable`
 
 ## ToDo
 
 1. Use Selenium headless (maybe using PhantomJS).
 2. Add support for cookies and basic auth.
 3. Add support for SEO url injection.
-4. Implement [Not Your Average Web Crawler](https://github.com/tijme/not-your-average-web-crawler).
-5. Document all code.
+4. Document all code.
