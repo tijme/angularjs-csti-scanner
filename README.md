@@ -1,4 +1,10 @@
-# AngularJS CSTI scanner
+<p align="center">
+    <img src=".github/logo.svg" width="300" height="300" alt="ACSTIS">
+    <br/>
+    <a href="https://www.python.org/"><img src="https://img.shields.io/pypi/pyversions/acstis.svg" alt=Python version"></a>
+    <a href="https://pypi.python.org/pypi/acstis/"><img src="https://img.shields.io/pypi/v/acstis.svg" alt="PyPi version"></a>
+    <a href="LICENSE.md"><img src="https://img.shields.io/pypi/l/acstis.svg" alt="License: MIT"></a>
+</p>
 
 *Automated client-side template injection (CSTI, sandbox escape) detection for AngularJS!*
 
@@ -9,7 +15,7 @@
 
 ## Installation
 
-Install [Python 3.5](https://www.python.org/downloads/) and the requirements.
+Install [Python 3.2](https://www.python.org/downloads/) and the requirements.
 
 `pip install -r requirements.txt`
 
