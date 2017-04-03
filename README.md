@@ -1,7 +1,7 @@
 <p align="center">
-    <img src="https://github.com/tijme/angular-csti-scanner/blob/nyawc/.github/logo.png" width="300" height="300" alt="ACSTIS">
+    <img src="https://github.com/tijme/angular-csti-scanner/blob/nyawc/.github/logo.png" height="300" alt="ACSTIS">
     <br/>
-    <a href="https://www.python.org/"><img src="https://img.shields.io/pypi/pyversions/acstis.svg" alt=Python version"></a>
+    <a href="https://www.python.org/"><img src="https://img.shields.io/pypi/pyversions/acstis.svg" alt="Python version"></a>
     <a href="https://pypi.python.org/pypi/acstis/"><img src="https://img.shields.io/pypi/v/acstis.svg" alt="PyPi version"></a>
     <a href="LICENSE.md"><img src="https://img.shields.io/pypi/l/acstis.svg" alt="License: MIT"></a>
 </p>
