@@ -1,23 +1,23 @@
 <p align="center">
-    <img src="https://github.com/tijme/angular-csti-scanner/blob/nyawc/.github/logo.png" height="300" alt="ACSTIS">
+    <img src="https://github.com/tijme/angular-csti-scanner/blob/develop/.github/logo.png" height="300" alt="AngularJS CSTI Scanner">
     <br/>
     <a href="https://www.python.org/"><img src="https://img.shields.io/pypi/pyversions/acstis.svg" alt="Python version"></a>
     <a href="https://pypi.python.org/pypi/acstis/"><img src="https://img.shields.io/pypi/v/acstis.svg" alt="PyPi version"></a>
     <a href="LICENSE.md"><img src="https://img.shields.io/pypi/l/acstis.svg" alt="License: MIT"></a>
 </p>
 
+## AngularJS CSTI Scanner
+
+AngularJS Client Side Template Injection (CSTI, )
+
+A very useful web crawler for vulnerability scanning. Not Your Average Web Crawler (N.Y.A.W.C) is a Python application that enables you to crawl web applications for requests instead of URLs. It crawls every GET and POST request on the specified domain and keeps track of the request and response data. It's main purpose is to be used in web application vulnerability scanners.
+
 *Automated client-side template injection (CSTI, sandbox escape) detection for AngularJS!*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
-
-## Demo
-[![Demo](https://finnwea.com/snippets/angularjs-sandbox-escape-scanner-loop.gif)](https://finnwea.com/snippets/angularjs-sandbox-escape-scanner-loop.gif) 
-
 ## Installation
+First make sure you're on [Python 3.3](https://www.python.org/) or higher. Then run the command below to install N.Y.A.W.C.
 
-Install [Python 3.2](https://www.python.org/downloads/) and the requirements.
-
-`pip install -r requirements.txt`
+`pip install --upgrade acstis`
 
 ## Usage
 
