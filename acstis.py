@@ -81,10 +81,11 @@ def parse_options(argv):
     return (input_uri, input_verify_exploit, input_use_crawler, input_quit_if_vulnerable)
 
 def main(argv):
+    init(autoreset=True)
+    print_copyright()
+    
     (uri, verify_exploit, use_crawler, quit_if_vulnerable) = parse_options(argv)
     Driver(uri, verify_exploit, use_crawler, quit_if_vulnerable)
 
 if __name__ == "__main__":
-    init(autoreset=True)
-    print_copyright()
     main(sys.argv[1:])

@@ -28,12 +28,12 @@ with open('requirements.txt') as file:
     requirements = file.read().splitlines()
 
 setup(
-    version="2.0.1",
-    name="acstis",
-    description="Automated client-side template injection (CSTI, sandbox escape/bypass) detection for AngularJS!",
-    long_description="",
+    version ="2.0.1",
+    name = "acstis",
+    description = "Automated client-side template injection (CSTI, sandbox escape/bypass) detection for AngularJS!",
+    long_description = "",
     keywords = "angularjs xss xss-scanner exploit angularjs-sandbox-escape vulnerability-scanner",
-    classifiers=[
+    classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "Intended Audience :: Developers",
@@ -51,12 +51,16 @@ setup(
         "Programming Language :: Python :: 3.3",
         "Topic :: Security"
     ],
-    packages=find_packages(),
-    platforms=["any"],
-    author="Tijme Gommers",
-    author_email="tijme@finnwea.com",
-    license="MIT",
-    url="https://github.com/tijme/angular-csti-scanner",
-    install_requires=requirements,
-    scripts=["bin/acstis"]
+    packages = find_packages(),
+    platforms = ["any"],
+    author = "Tijme Gommers",
+    author_email ="tijme@finnwea.com",
+    license = "MIT",
+    url = "https://github.com/tijme/angularjs-csti-scanner",
+    install_requires = requirements,
+    entry_points = {
+        'console_scripts': [
+            'acstis = acstis:main'
+        ]
+    }
 )

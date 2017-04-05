@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/tijme/angular-csti-scanner/blob/develop/.github/logo.png" height="300" alt="AngularJS CSTI Scanner">
+    <img src="https://github.com/tijme/angularjs-csti-scanner/blob/develop/.github/logo.png" height="300" alt="AngularJS CSTI Scanner">
     <br/>
     <a href="https://www.python.org/"><img src="https://img.shields.io/pypi/pyversions/acstis.svg" alt="Python version"></a>
     <a href="https://pypi.python.org/pypi/acstis/"><img src="https://img.shields.io/pypi/v/acstis.svg" alt="PyPi version"></a>
