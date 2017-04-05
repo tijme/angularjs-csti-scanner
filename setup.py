@@ -57,5 +57,6 @@ setup(
     author_email="tijme@finnwea.com",
     license="MIT",
     url="https://github.com/tijme/angular-csti-scanner",
-    install_requires=requirements
+    install_requires=requirements,
+    scripts=["bin/acstis"]
 )

@@ -30,7 +30,7 @@ import sys
 import getopt
 
 def print_copyright():
-    print(Fore.CYAN + Back.BLACK + "Automated client-side template injection (CSTI) detection for AngularJS!")
+    print(Fore.CYAN + Back.BLACK + "AngularJS CSTI Scanner (ACSTIS)")
     print(Fore.CYAN + Back.BLACK + "Copyright (c) 2017 Tijme Gommers (see `LICENSE.md`).")
     print("")
 
