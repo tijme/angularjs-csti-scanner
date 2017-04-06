@@ -28,7 +28,7 @@ with open('requirements.txt') as file:
     requirements = file.read().splitlines()
 
 setup(
-    version ="2.0.2",
+    version ="2.0.3",   
     name = "acstis",
     description = "Automated client-side template injection (CSTI, sandbox escape/bypass) detection for AngularJS!",
     long_description = "",
