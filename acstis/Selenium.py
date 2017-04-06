@@ -80,8 +80,8 @@ class Selenium:
         x = '32' if bits == 4 else '64'
 
         if platform == "linux" or platform == "linux2":
-            return path + "/../chrome_drivers/chromedriver_linux" + x
+            return path + "/chrome_drivers/chromedriver_linux" + x
         elif platform == "darwin":
-            return path + "/../chrome_drivers/chromedriver_mac64"
+            return path + "/chrome_drivers/chromedriver_mac64"
         elif platform == "win32":
-            return path + "/../chrome_drivers/chromedriver_win32"
+            return path + "/chrome_drivers/chromedriver_win32"

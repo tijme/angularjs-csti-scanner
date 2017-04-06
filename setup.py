@@ -65,12 +65,12 @@ setup(
     },
     data_files=[
         (
-            'chrome_drivers', 
+            'acstis/chrome_drivers', 
             [
-                'chrome_drivers/chromedriver_linux32',
-                'chrome_drivers/chromedriver_linux64',
-                'chrome_drivers/chromedriver_mac64',
-                'chrome_drivers/chromedriver_win32.exe',
+                'acstis/chrome_drivers/chromedriver_linux32',
+                'acstis/chrome_drivers/chromedriver_linux64',
+                'acstis/chrome_drivers/chromedriver_mac64',
+                'acstis/chrome_drivers/chromedriver_win32.exe',
             ]
         )
     ]
