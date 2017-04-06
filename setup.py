@@ -63,15 +63,12 @@ setup(
             'acstis = scripts.acstis_cli:main'
         ]
     },
-    data_files=[
-        (
-            'acstis/chrome_drivers', 
-            [
-                'acstis/chrome_drivers/chromedriver_linux32',
-                'acstis/chrome_drivers/chromedriver_linux64',
-                'acstis/chrome_drivers/chromedriver_mac64',
-                'acstis/chrome_drivers/chromedriver_win32.exe',
-            ]
-        )
-    ]
+    package_data={
+        'acstis': [
+            'chrome_drivers/chromedriver_linux32',
+            'chrome_drivers/chromedriver_linux64',
+            'chrome_drivers/chromedriver_mac64',
+            'chrome_drivers/chromedriver_win32.exe'
+        ]
+    }
 )
