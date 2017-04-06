@@ -80,7 +80,10 @@ def parse_options(argv):
 
     return (input_uri, input_verify_exploit, input_use_crawler, input_quit_if_vulnerable)
 
-def main(argv):
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+        
     init(autoreset=True)
     print_copyright()
     

@@ -60,7 +60,18 @@ setup(
     install_requires = requirements,
     entry_points = {
         'console_scripts': [
-            'acstis = acstis:main'
+            'acstis = scripts.acstis_cli:main'
         ]
-    }
+    },
+    data_files=[
+        (
+            'chrome_drivers', 
+            [
+                'chrome_drivers/chromedriver_linux32',
+                'chrome_drivers/chromedriver_linux64',
+                'chrome_drivers/chromedriver_mac64',
+                'chrome_drivers/chromedriver_win32.exe',
+            ]
+        )
+    ]
 )
