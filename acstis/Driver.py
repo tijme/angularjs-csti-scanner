@@ -53,7 +53,7 @@ class Driver:
 
     def __init__(self, uri, verify_exploit, use_crawler, quit_if_vulnerable):
         Logging.info("Started scan");
-        
+
         self.input_uri = uri
         self.input_verify_exploit = verify_exploit
         self.input_use_crawler = use_crawler
