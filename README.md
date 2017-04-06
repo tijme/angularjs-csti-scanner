@@ -1,6 +1,7 @@
 <p align="center">
     <img src="https://raw.githubusercontent.com/tijme/angularjs-csti-scanner/master/.github/logo.png" height="300" alt="AngularJS CSTI Scanner">
     <br/>
+    <a href="https://pypi.python.org/pypi/acstis/"><img src="https://img.shields.io/pypi/status/nyawc.svg" alt="PyPi Status"></a>
     <a href="https://www.python.org/"><img src="https://img.shields.io/pypi/pyversions/acstis.svg" alt="Python version"></a>
     <a href="https://pypi.python.org/pypi/acstis/"><img src="https://img.shields.io/pypi/v/acstis.svg" alt="PyPi version"></a>
     <a href="LICENSE.md"><img src="https://img.shields.io/pypi/l/acstis.svg" alt="License: MIT"></a>
