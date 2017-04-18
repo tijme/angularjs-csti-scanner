@@ -72,7 +72,11 @@ class Driver:
 
         self.crawler_options.performance.max_threads = 8
 
-        self.website_details = Scraper.get_details(self.input_uri);
+        try:
+            self.website_details = Scraper.get_details(self.input_uri);
+        except Exception as e:
+            Logging.red("Error while scraping URL '{}': {}".format(self.input_uri, str(e)))
+            return
 
         if not self.website_details["uses_angular"]:
             Logging.red("This website does not use AngularJS.")
