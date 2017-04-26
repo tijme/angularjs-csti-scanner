@@ -24,7 +24,8 @@
 
 from nyawc.Options import Options
 from nyawc.Queue import QueueItem
-from nyawc.Crawler import Crawler, CrawlerActions
+from nyawc.Crawler import Crawler
+from nyawc.CrawlerActions import CrawlerActions
 from nyawc.http.Request import Request
 from acstis.Logging import Logging
 from acstis.Exploit import Exploit
@@ -67,7 +68,6 @@ class Driver:
         self.crawler_options.scope.protocol_must_match = False
         self.crawler_options.scope.subdomain_must_match = True
         self.crawler_options.scope.domain_must_match = True
-        self.crawler_options.scope.ignore_similar_requests = True
         self.crawler_options.scope.max_depth = 0 if not self.input_use_crawler else None 
 
         self.crawler_options.performance.max_threads = 8
@@ -94,6 +94,8 @@ class Driver:
         Logging.info("Found {} vulnerable URI(s)".format(len(self.vulnerable_requests)))
 
     def cb_request_before_start(self, queue, queue_item):
+        Logging.info("Checking {}".format(queue_item.request.url))
+        
         result = Exploit.is_vulnerable(queue_item, self.website_details["angular_version"], self.input_verify_exploit)
 
         if result is not False:
