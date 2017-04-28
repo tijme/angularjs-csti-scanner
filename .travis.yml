@@ -22,12 +22,12 @@ install:
   - ls
   - cd /var/www/angularjs-vulnerable
   - ls
-  - wget -O 0.txt http://localhost/
-  - cat 0.txt
-  - wget -O 1.txt http://localhost/angularjs-vulnerable
-  - cat 1.txt
-  - wget -O 2.txt http://localhost/angularjs-vulnerable/angular-1.0.0.php
-  - cat 2.txt
+  - sudo wget -O 0.txt http://localhost/
+  - sudo cat 0.txt
+  - sudo wget -O 1.txt http://localhost/angularjs-vulnerable
+  - sudo cat 1.txt
+  - sudo wget -O 2.txt http://localhost/angularjs-vulnerable/angular-1.0.0.php
+  - sudo cat 2.txt
 
 before_script:
   - export DISPLAY=:99.0
