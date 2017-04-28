@@ -87,14 +87,14 @@ class Driver:
         crawler = Crawler(self.crawler_options)
         crawler.start_with(Request(self.input_uri))
 
+        if len(self.vulnerable_requests) == 0:
+            sys.exit(1)
+
     def cb_crawler_before_start(self):
         Logging.info("Started crawler");
 
     def cb_crawler_after_finish(self, queue):
         Logging.info("Found {} vulnerable URI(s)".format(len(self.vulnerable_requests)))
-
-        if len(self.vulnerable_requests) is 0:
-            sys.exit(1)
 
     def cb_request_before_start(self, queue, queue_item):
         Logging.info("Checking {}".format(queue_item.request.url))
