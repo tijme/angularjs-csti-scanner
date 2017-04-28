@@ -14,11 +14,7 @@ install:
   - sudo service apache2 restart
   - pwd
   - ls
-  - cd /var/www
-  - ls
-  - mkdir html
-  - cd ~/tijme/angularjs-csti-scanner
-  - mv test/vulnerable-sites/* /var/www/html/vulnerable-sites
+  - mv test/vulnerable-sites/* /var/www/vulnerable-sites
   - pip install -r requirements.txt
 
 script:
