@@ -4,7 +4,6 @@ set -e
 
 acstis --uri="http://localhost/angularjs-vulnerable/angular-1.0.0.php" --crawl
 acstis --uri="http://localhost/angularjs-vulnerable/angular-1.0.1.php" --crawl
-acstis --uri="http://localhost/" --crawl
 # acstis --uri="http://localhost/angularjs-vulnerable/angular-1.0.2.php" --crawl
 # acstis --uri="http://localhost/angularjs-vulnerable/angular-1.0.3.php" --crawl
 # acstis --uri="http://localhost/angularjs-vulnerable/angular-1.0.4.php" --crawl

@@ -76,11 +76,11 @@ class Driver:
             self.website_details = Scraper.get_details(self.input_uri);
         except Exception as e:
             Logging.red("Error while scraping URL '{}': {}".format(self.input_uri, str(e)))
-            sys.exit()
+            sys.exit(1)
 
         if not self.website_details["uses_angular"]:
             Logging.red("This website does not use AngularJS.")
-            sys.exit()
+            sys.exit(1)
 
         Logging.info("Found AngularJS version " + self.website_details["angular_version"])
 
@@ -94,7 +94,7 @@ class Driver:
         Logging.info("Found {} vulnerable URI(s)".format(len(self.vulnerable_requests)))
 
         if len(self.vulnerable_requests) is 0:
-            sys.exit()
+            sys.exit(1)
 
     def cb_request_before_start(self, queue, queue_item):
         Logging.info("Checking {}".format(queue_item.request.url))
