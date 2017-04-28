@@ -76,11 +76,11 @@ class Driver:
             self.website_details = Scraper.get_details(self.input_uri);
         except Exception as e:
             Logging.red("Error while scraping URL '{}': {}".format(self.input_uri, str(e)))
-            return
+            sys.exit()
 
         if not self.website_details["uses_angular"]:
             Logging.red("This website does not use AngularJS.")
-            return
+            sys.exit()
 
         Logging.info("Found AngularJS version " + self.website_details["angular_version"])
 

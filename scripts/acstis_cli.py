@@ -69,8 +69,7 @@ def parse_options(argv):
 
     except getopt.GetoptError as e:
         print_usage()
-        print(Fore.RED + Back.BLACK + "Error: " + str(e))               
-        sys.exit(2)    
+        sys.exit(Fore.RED + Back.BLACK + "Error: " + str(e))    
 
     if input_uri is None or input_help is True:
         print_usage()

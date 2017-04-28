@@ -18,6 +18,16 @@ install:
   - sudo chown -R www-data:www-data /var/www
   - sudo chmod +x test/test-vulnerable-sites.sh
   - pip install -r requirements.txt
+  - cd /var/www
+  - ls
+  - cd /var/www/angularjs-vulnerable
+  - ls
+  - wget -O 0.txt http://localhost/
+  - cat 0.txt
+  - wget -O 1.txt http://localhost/angularjs-vulnerable
+  - cat 1.txt
+  - wget -O 2.txt http://localhost/angularjs-vulnerable/angular-1.0.0.php
+  - cat 2.txt
 
 before_script:
   - export DISPLAY=:99.0
