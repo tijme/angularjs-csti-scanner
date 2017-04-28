@@ -14,6 +14,7 @@ install:
   - sudo service apache2 restart
   - pwd
   - ls
+  - mkdir /var/www/vulnerable-sites
   - mv test/vulnerable-sites/* /var/www/vulnerable-sites
   - pip install -r requirements.txt
 
