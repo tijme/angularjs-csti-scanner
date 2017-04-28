@@ -1,0 +1,21 @@
+os:
+  - linux
+
+language: python
+
+python:
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
+
+install:
+  - apt-get install -y apache2
+  - apt-get install -y php5-common libapache2-mod-php5 php5-cli
+  - service apache2 restart
+  - cp -r test/vulnerable-sites /var/www/vulnerable-sites
+  - pip install -r requirements.txt
+
+script:
+  - python setup.py install
+  - test/test-vulnerable-sites.sh
