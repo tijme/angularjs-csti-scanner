@@ -104,6 +104,8 @@ class Driver:
         print("DBG 1")
 
         if result is not False:
+
+            print("DBG 112")
             self.vulnerable_requests.append(result);
             Logging.red("Request is vulnerable [" + result.request.method + "] " + result.request.url + " (PostData: " + str(result.request.data) + ")")
 
