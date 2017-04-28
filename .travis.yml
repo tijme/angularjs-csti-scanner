@@ -1,6 +1,5 @@
-os:
-  - linux
-
+sudo: required
+os: linux
 language: python
 
 python:
