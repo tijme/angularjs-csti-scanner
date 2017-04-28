@@ -108,7 +108,6 @@ class Driver:
             if self.input_quit_if_vulnerable:
                 return CrawlerActions.DO_STOP_CRAWLING
 
-        print("DBG 2")
         return CrawlerActions.DO_CONTINUE_CRAWLING
 
     def cb_request_after_finish(self, queue, queue_item, new_queue_items):
