@@ -42,7 +42,6 @@ class Selenium:
         except Exception:
             response = None
 
-        browser.close()
         browser.quit()
         return response
 
@@ -65,7 +64,6 @@ class Selenium:
         except Exception as err:
             alert_is_popped = False
         
-        browser.close()
         browser.quit()
 
         return alert_is_popped

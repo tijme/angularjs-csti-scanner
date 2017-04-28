@@ -3,6 +3,10 @@ os: linux
 dist: trusty
 language: python
 
+env:
+  global:
+    - DBUS_SESSION_BUS_ADDRESS=/dev/null
+
 python:
   - 3.4
   - 3.5
