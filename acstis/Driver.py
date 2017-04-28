@@ -93,6 +93,9 @@ class Driver:
     def cb_crawler_after_finish(self, queue):
         Logging.info("Found {} vulnerable URI(s)".format(len(self.vulnerable_requests)))
 
+        if len(self.vulnerable_requests) is 0:
+            sys.exit()
+
     def cb_request_before_start(self, queue, queue_item):
         Logging.info("Checking {}".format(queue_item.request.url))
         
