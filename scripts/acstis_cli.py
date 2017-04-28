@@ -69,14 +69,14 @@ def parse_options(argv):
 
     except getopt.GetoptError as e:
         print_usage()
-        print(Fore.RED + Back.BLACK + "Error: " + str(e))               
-        sys.exit(2)    
+        print(Fore.RED + Back.BLACK + "Error: " + str(e))
+        sys.exit(1)    
 
     if input_uri is None or input_help is True:
         print_usage()
         if input_help is False:
             print(Fore.RED + Back.BLACK + "Error: URI argument is required, please use --uri= or -u")     
-        sys.exit()
+        sys.exit(1)
 
     return (input_uri, input_verify_exploit, input_use_crawler, input_quit_if_vulnerable)
 

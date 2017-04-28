@@ -76,16 +76,19 @@ class Driver:
             self.website_details = Scraper.get_details(self.input_uri);
         except Exception as e:
             Logging.red("Error while scraping URL '{}': {}".format(self.input_uri, str(e)))
-            return
+            sys.exit(1)
 
         if not self.website_details["uses_angular"]:
             Logging.red("This website does not use AngularJS.")
-            return
+            sys.exit(1)
 
         Logging.info("Found AngularJS version " + self.website_details["angular_version"])
 
         crawler = Crawler(self.crawler_options)
         crawler.start_with(Request(self.input_uri))
+
+        if len(self.vulnerable_requests) == 0:
+            sys.exit(1)
 
     def cb_crawler_before_start(self):
         Logging.info("Started crawler");
