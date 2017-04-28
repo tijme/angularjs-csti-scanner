@@ -101,6 +101,8 @@ class Driver:
         
         result = Exploit.is_vulnerable(queue_item, self.website_details["angular_version"], self.input_verify_exploit)
 
+        print("DBG 1")
+
         if result is not False:
             self.vulnerable_requests.append(result);
             Logging.red("Request is vulnerable [" + result.request.method + "] " + result.request.url + " (PostData: " + str(result.request.data) + ")")
@@ -108,6 +110,7 @@ class Driver:
             if self.input_quit_if_vulnerable:
                 return CrawlerActions.DO_STOP_CRAWLING
 
+        print("DBG 2")
         return CrawlerActions.DO_CONTINUE_CRAWLING
 
     def cb_request_after_finish(self, queue, queue_item, new_queue_items):
