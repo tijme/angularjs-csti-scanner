@@ -101,11 +101,7 @@ class Driver:
         
         result = Exploit.is_vulnerable(queue_item, self.website_details["angular_version"], self.input_verify_exploit)
 
-        print("DBG 1")
-
         if result is not False:
-
-            print("DBG 112")
             self.vulnerable_requests.append(result);
             Logging.red("Request is vulnerable [" + result.request.method + "] " + result.request.url + " (PostData: " + str(result.request.data) + ")")
 
