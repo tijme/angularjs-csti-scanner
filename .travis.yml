@@ -15,7 +15,7 @@ install:
   - sudo mkdir /var/www/vulnerable-sites
   - sudo mv test/vulnerable-sites/* /var/www/vulnerable-sites
   - sudo chown -R www-data:www-data /var/www
-  - sudo chmod +x test/vulnerable-sites.sh
+  - sudo chmod +x test/test-vulnerable-sites.sh
   - pip install -r requirements.txt
 
 script:
