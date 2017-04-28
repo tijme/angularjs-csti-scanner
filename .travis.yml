@@ -12,7 +12,7 @@ install:
   - sudo apt-get install -y apache2
   - sudo apt-get install -y php5-common libapache2-mod-php5 php5-cli
   - sudo service apache2 restart
-  - cp -r test/vulnerable-sites /var/www/vulnerable-sites
+  - cp -R test/vulnerable-sites /var/www/html/vulnerable-sites/
   - pip install -r requirements.txt
 
 script:
