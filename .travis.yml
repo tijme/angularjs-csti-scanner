@@ -14,14 +14,9 @@ install:
   - sudo apt-get install -y php5-common libapache2-mod-php5 php5-cli
   - sudo service apache2 restart
   - sudo mkdir /var/www/angularjs-vulnerable
-  - sudo cp -R test/vulnerable-sites/ /var/www/angularjs-vulnerable/
+  - sudo cp test/vulnerable-sites/* /var/www/angularjs-vulnerable/
   - sudo chown -R www-data:www-data /var/www
   - sudo chmod +x test/test-vulnerable-sites.sh
-  - cd /var/www
-  - ls
-  - cd /var/www/angularjs-vulnerable
-  - ls
-  - cd ~/tijme/angularjs-csti-scanner
   - pip install -r requirements.txt
 
 before_script:
