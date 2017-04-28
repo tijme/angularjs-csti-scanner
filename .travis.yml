@@ -1,5 +1,6 @@
 sudo: required
 os: linux
+dist: trusty
 language: python
 
 python:
@@ -17,6 +18,11 @@ install:
   - sudo chown -R www-data:www-data /var/www
   - sudo chmod +x test/test-vulnerable-sites.sh
   - pip install -r requirements.txt
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
 
 script:
   - python setup.py install
