@@ -5,6 +5,7 @@ language: python
 
 env:
   global:
+    # Prevent Google Chrome driver from freezing
     - DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 python:

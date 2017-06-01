@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 # MIT License
-# 
+#
 # Copyright (c) 2017 Tijme Gommers
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -47,7 +47,7 @@ class Driver:
     input_quit_if_vulnerable = False
 
     crawler_options = Options()
-    
+
     website_details = None
 
     vulnerable_requests = []
@@ -68,9 +68,9 @@ class Driver:
         self.crawler_options.scope.protocol_must_match = False
         self.crawler_options.scope.subdomain_must_match = True
         self.crawler_options.scope.domain_must_match = True
-        self.crawler_options.scope.max_depth = 0 if not self.input_use_crawler else None 
+        self.crawler_options.scope.max_depth = 0 if not self.input_use_crawler else None
 
-        self.crawler_options.performance.max_threads = 8
+        self.crawler_options.performance.max_threads = 12
 
         try:
             self.website_details = Scraper.get_details(self.input_uri);
@@ -98,7 +98,7 @@ class Driver:
 
     def cb_request_before_start(self, queue, queue_item):
         Logging.info("Checking {}".format(queue_item.request.url))
-        
+
         result = Exploit.is_vulnerable(queue_item, self.website_details["angular_version"], self.input_verify_exploit)
 
         if result is not False:
