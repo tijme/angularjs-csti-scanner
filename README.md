@@ -16,6 +16,8 @@ First make sure you're on [Python 3.4](https://www.python.org/) or higher. Then 
 
 `pip install --upgrade acstis`
 
+Also make sure you have Google Chrome installed since ACSTIS uses Google Chrome to verify if alerts popped.
+
 ## Usage
 
 ### Options
