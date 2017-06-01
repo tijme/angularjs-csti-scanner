@@ -12,7 +12,7 @@
 AngularJS CSTI Scanner (ACSTIS) is a Python application that enables you to scan certain web applications for AngularJS Client Side Template Injection (CSTI, sandbox escape/bypass). It supports scanning a single request but also crawling an entire web application for the vulnerability.
 
 ## Installation
-First make sure you're on [Python 3.4](https://www.python.org/) or higher. Then run the command below to install ACSTIS.
+First make sure you're on [Python 3.4](https://www.python.org/) or higher. Then run the command below to install ACSTIS **(depending on your installation you should use `pip` or `pip3`)**.
 
 `pip install --upgrade acstis`
 
