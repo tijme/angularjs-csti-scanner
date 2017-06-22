@@ -90,5 +90,5 @@ def main(argv=None):
     (uri, verify_exploit, use_crawler, quit_if_vulnerable) = parse_options(argv)
     Driver(uri, verify_exploit, use_crawler, quit_if_vulnerable)
 
-if __name__ == "__main__":
+if __name__ == "__main__" or __name__ == "acstis_scripts.acstis_cli":
     main(sys.argv[1:])
