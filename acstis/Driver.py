@@ -67,7 +67,8 @@ class Driver:
 
         self.crawler_options.scope.protocol_must_match = False
         self.crawler_options.scope.subdomain_must_match = True
-        self.crawler_options.scope.domain_must_match = True
+        self.crawler_options.scope.hostname_must_match = True
+        self.crawler_options.scope.tld_must_match = True
         self.crawler_options.scope.max_depth = 0 if not self.input_use_crawler else None
 
         self.crawler_options.performance.max_threads = 12
