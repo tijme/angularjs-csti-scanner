@@ -70,7 +70,7 @@ class Driver:
         self.crawler_options.scope.domain_must_match = True
         self.crawler_options.scope.max_depth = 0 if not self.input_use_crawler else None
 
-        self.crawler_options.performance.max_threads = 20
+        self.crawler_options.performance.max_threads = 12
 
         try:
             self.website_details = Scraper.get_details(self.input_uri);
