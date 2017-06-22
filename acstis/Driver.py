@@ -53,7 +53,7 @@ class Driver:
     vulnerable_requests = []
 
     def __init__(self, uri, verify_exploit, use_crawler, quit_if_vulnerable):
-        Logging.info("Started scan");
+        Logging.info("Started scan")
 
         self.input_uri = uri
         self.input_verify_exploit = verify_exploit
@@ -74,7 +74,7 @@ class Driver:
         self.crawler_options.performance.max_threads = 12
 
         try:
-            self.website_details = Scraper.get_details(self.input_uri);
+            self.website_details = Scraper.get_details(self.input_uri)
         except Exception as e:
             Logging.red("Error while scraping URL '{}': {}".format(self.input_uri, str(e)))
             sys.exit(1)
@@ -92,7 +92,7 @@ class Driver:
             sys.exit(1)
 
     def cb_crawler_before_start(self):
-        Logging.info("Started crawler");
+        Logging.info("Started crawler")
 
     def cb_crawler_after_finish(self, queue):
         Logging.info("Found {} vulnerable URI(s)".format(len(self.vulnerable_requests)))
@@ -103,7 +103,7 @@ class Driver:
         result = Exploit.is_vulnerable(queue_item, self.website_details["angular_version"], self.input_verify_exploit)
 
         if result is not False:
-            self.vulnerable_requests.append(result);
+            self.vulnerable_requests.append(result)
             Logging.red("Request is vulnerable [" + result.request.method + "] " + result.request.url + " (PostData: " + str(result.request.data) + ")")
 
             if self.input_quit_if_vulnerable:

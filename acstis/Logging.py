@@ -30,16 +30,16 @@ class Logging:
 
     @staticmethod
     def info(message):
-        print(Back.BLACK + str(datetime.datetime.now()) + ": " + message);
+        print(Back.BLACK + str(datetime.datetime.now()) + ": " + message)
 
     @staticmethod
     def red(message):
-        print(Fore.RED + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
+        print(Fore.RED + Back.BLACK + str(datetime.datetime.now()) + ": " + message)
 
     @staticmethod
     def green(message):
-        print(Fore.GREEN + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
+        print(Fore.GREEN + Back.BLACK + str(datetime.datetime.now()) + ": " + message)
 
     @staticmethod
     def yellow(message):
-        print(Fore.YELLOW + Back.BLACK + str(datetime.datetime.now()) + ": " + message);
+        print(Fore.YELLOW + Back.BLACK + str(datetime.datetime.now()) + ": " + message)

@@ -38,7 +38,7 @@ class Selenium:
         browser.get(url)
             
         try:
-            response = browser.execute_script(command);
+            response = browser.execute_script(command)
         except Exception:
             response = None
 
