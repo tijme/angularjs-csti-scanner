@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 # MIT License
-# 
+#
 # Copyright (c) 2017 Tijme Gommers
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,73 +22,111 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import argparse
+import colorlog
+import logging
+
+from nyawc.Options import Options
 from acstis.Driver import Driver
-from acstis.Logging import Logging
-from colorama import init, Fore, Back, Style
+from acstis.helpers.PackageHelper import PackageHelper
 
-import sys 
-import getopt
+def require_arguments():
+    """Get the arguments from CLI input.
 
-def print_copyright():
-    print(Fore.CYAN + Back.BLACK + "AngularJS CSTI Scanner (ACSTIS)")
-    print(Fore.CYAN + Back.BLACK + "Copyright (c) 2017 Tijme Gommers (see `LICENSE.md`).")
-    print("")
+    Returns:
+        :class:`argparse.Namespace`: A namespace with all the parsed CLI arguments.
 
-def print_usage():
-    print("Usage: acstis <options>")
-    print("")
-    print("Options:")
-    print("-u <uri>,      --uri=<uri>              Required        The hostname or URL to run the exploit on (e.g. https://www.example.ltd/).")
-    print("-v,            --verify                 Optional        Extra check by a JavaScript engine to ensure the payload is executed.")
-    print("-c,            --crawl                  Optional        Crawl & test all available URL's on the hostname of the given URL.")
-    print("-q,            --quit-if-vulnerable     Optional        Stop testing if a vulnerable URL was found.")
-    print("-h,            --help                   Optional        Print this help message.")
-    print("")
+    """
 
-def parse_options(argv):
-    input_uri = None
-    input_help = False
-    input_verify_exploit = False
-    input_use_crawler = False
-    input_quit_if_vulnerable = False
+    parser = argparse.ArgumentParser(
+        prog=PackageHelper.get_alias(),
+        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=150, width=150)
+    )
 
-    try:                                
-        opts, args = getopt.getopt(argv, "u:hvcq", ["uri=", "help", "verify", "crawl", "quit-if-vulnerable"])
+    optional = parser._action_groups.pop()
+    required = parser.add_argument_group("required arguments")
 
-        for opt, arg in opts:
-            if opt in ("-u", "--uri"):
-                input_uri = arg
-            elif opt in ("-h", "--help"):
-                input_help = True
-            elif opt in ("-v", "--verify"):
-                input_verify_exploit = True
-            elif opt in ("-c", "--crawl"):
-                input_use_crawler = True
-            elif opt in ("-q", "--quit-if-vulnerable"):
-                input_quit_if_vulnerable = True
+    required.add_argument("-d", "--domain", help="the domain to crawl (e.g. finnwea.com)", required=True)
 
-    except getopt.GetoptError as e:
-        print_usage()
-        print(Fore.RED + Back.BLACK + "Error: " + str(e))
-        sys.exit(1)    
+    optional.add_argument("-pmm", "--protocol-must-match", help="only crawl pages with the same protocol as the startpoint (e.g. only https)", action="store_true")
+    optional.add_argument("-cos", "--crawl-other-subdomains", help="also crawl pages that have another subdomain than the startpoint", action="store_true")
+    optional.add_argument("-coh", "--crawl-other-hostnames", help="also crawl pages that have another hostname than the startpoint", action="store_true")
+    optional.add_argument("-cot", "--crawl-other-tlds", help="also crawl pages that have another tld than the startpoint", action="store_true")
+    optional.add_argument("-siv", "--stop-if-vulnerable", help="stop crawling if a vulnerability was found", action="store_true")
+    optional.add_argument("-md", "--max-depth", help="the maximum search depth (default is unlimited)", type=int)
+    optional.add_argument("-mt", "--max-threads", help="the maximum amount of simultaneous threads to use (default is 8)", type=int, default=8)
 
-    if input_uri is None or input_help is True:
-        print_usage()
-        if input_help is False:
-            print(Fore.RED + Back.BLACK + "Error: URI argument is required, please use --uri= or -u")     
-        sys.exit(1)
+    parser._action_groups.append(optional)
+    return parser.parse_args()
 
-    return (input_uri, input_verify_exploit, input_use_crawler, input_quit_if_vulnerable)
+def setup_logger():
+    """Setup ColorLog to enable colored logging output."""
 
-def main(argv=None):
-    if argv is None:
-        argv = sys.argv[1:]
-        
-    init(autoreset=True)
-    print_copyright()
-    
-    (uri, verify_exploit, use_crawler, quit_if_vulnerable) = parse_options(argv)
-    Driver(uri, verify_exploit, use_crawler, quit_if_vulnerable)
+    # Colored logging
+    handler = colorlog.StreamHandler()
+    handler.setFormatter(colorlog.ColoredFormatter(
+        "%(log_color)s[%(levelname)s] %(message)s",
+        log_colors={
+            "DEBUG": "cyan",
+            "INFO": "white",
+            "SUCCESS": "green",
+            "WARNING": "yellow",
+            "ERROR": "red",
+            "CRITICAL": "red,bg_white"
+        }
+    ))
+
+    logger = colorlog.getLogger()
+    logger.addHandler(handler)
+
+    # Also show INFO logs
+    logger.setLevel(logging.INFO)
+
+    # Add SUCCESS logging
+    logging.SUCCESS = 25
+    logging.addLevelName(
+        logging.SUCCESS,
+        "SUCCESS"
+    )
+
+    setattr(
+        logger,
+        "success",
+        lambda message, *args: logger._log(logging.SUCCESS, message, args)
+    )
+
+def print_banner():
+    """Print a useless ASCII art banner to make things look a bit nicer."""
+
+    print("""
+ █████╗  ██████╗███████╗████████╗██╗███████╗
+██╔══██╗██╔════╝██╔════╝╚══██╔══╝██║██╔════╝
+███████║██║     ███████╗   ██║   ██║███████╗
+██╔══██║██║     ╚════██║   ██║   ██║╚════██║
+██║  ██║╚██████╗███████║   ██║   ██║███████║
+╚═╝  ╚═╝ ╚═════╝╚══════╝   ╚═╝   ╚═╝╚══════╝
+Version """ + PackageHelper.get_version() + """ - Copyright 2017 Tijme Gommers <tijme@finnwea.com>
+    """)
+
+def main():
+    """Start the scanner."""
+
+    print_banner()
+    setup_logger()
+
+    args = require_arguments()
+
+    options = Options()
+
+    options.scope.protocol_must_match = args.protocol_must_match
+    options.scope.subdomain_must_match = not args.crawl_other_subdomains
+    options.scope.hostname_must_match = not args.crawl_other_hostnames
+    options.scope.tld_must_match = not args.crawl_other_tlds
+    options.scope.max_depth = args.max_depth
+    options.performance.max_threads = args.max_threads
+
+    driver = Driver(args, options)
+    driver.start()
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
