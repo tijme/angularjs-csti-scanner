@@ -1,0 +1,12 @@
+* Add all actions (Traverse, FormData & QueryData)
+* Cache Payloads.get_for_version() data
+* Recognize AngularJS version without Chrome
+* Add "Payload was partially reflected" if e.g. input field has a maximum length
+* Try PhantomJS verification instead of Chrome
+* Remove payloads that do not work for the specified version
+* Correct CLI arguments
+* Support scanning SEO urls
+* Add unit-tests for all AngularJS versions
+* Check if "if str(queue_item.response.status_code).startswith(("2", "3")):" can be removed.
+* Add example with authentication/cookies etc
+* Remove .todo

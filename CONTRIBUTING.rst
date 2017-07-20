@@ -37,6 +37,6 @@ Submitting Changes
 
 -  Push your changes to the topic branch in your fork of the repository.
 -  Submit a pull request to the main repository
-   (``tijme/detective``).
+   (``tijme/angularjs-csti-scanner``).
 
 .. _Google Python Style Guide: https://google.github.io/styleguide/pyguide.html

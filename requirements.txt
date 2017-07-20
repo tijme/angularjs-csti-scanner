@@ -1,2 +1,4 @@
 colorlog==2.10.0
-nyawc==1.7.0
+nyawc==1.7.2
+requests==2.18.1
+requests_toolbelt==0.8.0

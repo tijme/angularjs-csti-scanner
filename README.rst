@@ -34,7 +34,7 @@ Table of contents
 -----------------
 
 -  `Installation <#installation>`__
--  `Documentation <#documentation>`__
+-  `Usage <#usage>`__
 -  `Issues <#issues>`__
 -  `License <#license>`__
 
@@ -45,8 +45,8 @@ First make sure you're on `Python 2.7/3.3 <https://www.python.org/>`__ or higher
 
 ``$ pip install --upgrade acstis``
 
-Documentation
--------------
+Usage
+-----
 
 #ToDo
 

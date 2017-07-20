@@ -64,6 +64,11 @@ setup(
             ".semver"
         ]
     },
+    entry_points = {
+        'console_scripts': [
+            'acstis = acstis_scripts.acstis_cli:main'
+        ]
+    },
     platforms=["any"],
     author="Tijme Gommers",
     author_email="acstis@finnwea.com",
