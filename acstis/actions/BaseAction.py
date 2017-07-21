@@ -56,6 +56,16 @@ class BaseAction(object):
         self.__queue_item = queue_item
         return self.get_action_items_derived()
 
+    def get_item(self):
+        """Get the original queue item.
+
+        Returns:
+            :class:`nyawc.QueueItem`: The original queue item.
+
+        """
+
+        return self.__queue_item
+
     def get_item_copy(self):
         """Copy the current queue item.
 

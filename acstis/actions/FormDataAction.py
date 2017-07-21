@@ -53,4 +53,13 @@ class FormDataAction(BaseAction):
 
         items = []
 
+        if not self.get_item().request.data:
+            return items
+
+        for (key, value) in self.get_item().request.data.items():
+            for payload in self.__payloads:
+                queue_item = self.get_item_copy()
+                queue_item.request.data[key] = payload
+                items.append(queue_item)
+
         return items

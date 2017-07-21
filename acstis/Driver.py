@@ -30,6 +30,7 @@ from nyawc.QueueItem import QueueItem
 from nyawc.Crawler import Crawler
 from nyawc.CrawlerActions import CrawlerActions
 from nyawc.http.Request import Request
+from acstis.helpers.BrowserHelper import BrowserHelper
 from acstis.helpers.PackageHelper import PackageHelper
 from acstis.Scanner import Scanner
 
@@ -44,9 +45,6 @@ class Driver:
 
     """
 
-    # ToDo: make this dynamic
-    __angular_version = "1.4.2"
-
     def __init__(self, args, options):
         """Constructs a Driver instance. The driver instance manages the crawling proces.
 
@@ -56,12 +54,12 @@ class Driver:
 
         """
 
+        self.stopping = False
+
         self.__args = args
         self.__options = options
         self.__vulnerable_items = []
-        self.stopping = False
 
-        self.__options.misc.debug = True
         self.__options.callbacks.crawler_before_start = self.cb_crawler_before_start
         self.__options.callbacks.crawler_after_finish = self.cb_crawler_after_finish
         self.__options.callbacks.request_before_start = self.cb_request_before_start
@@ -92,6 +90,20 @@ class Driver:
     def start(self):
         """Start the crawler."""
 
+        colorlog.getLogger().info("Looking for AngularJS version using a headless browser.")
+        colorlog.getLogger().info("Waiting until DOM is completely loaded.")
+
+        self.__angular_version = BrowserHelper.javascript(
+            self.__args.domain,
+            "return angular.version.full"
+        )
+
+        if not self.__angular_version:
+            colorlog.getLogger().error("Couldn't determine the AngularJS version (`angular.version.full` threw an exception).")
+            return
+
+        colorlog.getLogger().info("Found AngularJS version " + self.__angular_version + ".")
+
         crawler = Crawler(self.__options)
         signal.signal(signal.SIGINT, self.__signal_handler)
 
@@ -121,7 +133,7 @@ class Driver:
             colorlog.getLogger().success("Listing vulnerable request(s).")
 
             for vulnerable_item in self.__vulnerable_items:
-                colorlog.getLogger().success(vulnerable_item.request.url)
+                colorlog.getLogger().success(self.__request_to_string(vulnerable_item.request))
         else:
             colorlog.getLogger().warning("Couldn't find any vulnerable requests.")
 
@@ -165,7 +177,7 @@ class Driver:
         self.__vulnerable_items.extend(queue_item.vulnerable_items)
 
         for vulnerable_item in queue_item.vulnerable_items:
-            colorlog.getLogger().success(vulnerable_item.request.url)
+            colorlog.getLogger().success(self.__request_to_string(vulnerable_item.request))
 
         if self.__vulnerable_items and self.__args.stop_if_vulnerable:
             self.stopping = True
@@ -204,3 +216,25 @@ class Driver:
             return
 
         queue_item.vulnerable_items = Scanner(self, self.__angular_version, queue_item).get_vulnerable_items()
+
+    def __request_to_string(self, request):
+        """Convert the given requests to a string representation.
+
+        Args:
+            request (:class:`nyawc.http.Request`): The request to convert.
+
+        Returns:
+            str: The string representation
+
+        """
+
+        data = ""
+
+        if request.data:
+            key_values = []
+            for (key, value) in request.data.items():
+                key_values.append(key + "=" + value)
+
+            data += "&".join(key_values)
+
+        return request.method.upper() + "(" + data + "): " + request.url
