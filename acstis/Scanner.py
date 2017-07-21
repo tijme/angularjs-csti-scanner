@@ -107,6 +107,8 @@ class Scanner:
 
         """
 
+        print(queue_item.request.url)
+
         try:
             queue_item.response = self.__make_request(
                 queue_item.request.url,

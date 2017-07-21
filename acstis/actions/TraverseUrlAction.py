@@ -53,4 +53,25 @@ class TraverseUrlAction(BaseAction):
 
         items = []
 
+        path = self.get_parsed_url().path
+        filename = self.get_filename()
+
+        if filename:
+            path[0:-len(filename)]
+
+        parts = list(filter(None, path.split("/")))
+
+        for index in range(0, len(parts)):
+            for payload in self.__payloads:
+                queue_item = self.get_item_copy()
+
+                path = "/".join(parts[0:index])
+                path_with_affix = ("/" if path else "") + path + "/" + payload
+
+                parsed = self.get_parsed_url(queue_item.request.url)
+                parsed = parsed._replace(path=path_with_affix, query="")
+                queue_item.request.url = parsed.geturl()
+
+                items.append(queue_item)
+
         return items

@@ -61,6 +61,7 @@ class Driver:
         self.__vulnerable_items = []
         self.stopping = False
 
+        self.__options.misc.debug = True
         self.__options.callbacks.crawler_before_start = self.cb_crawler_before_start
         self.__options.callbacks.crawler_after_finish = self.cb_crawler_after_finish
         self.__options.callbacks.request_before_start = self.cb_request_before_start

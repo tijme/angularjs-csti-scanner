@@ -2,7 +2,7 @@
 
    <p align="center">
 
-.. image:: https://rawgit.com/tijme/acstis/refactor/.github/logo.svg
+.. image:: https://rawgit.com/tijme/acstis/master/.github/logo.svg
    :width: 300px
    :height: 300px
    :alt: AngularJS Client-Side Template Injection Logo

@@ -26,9 +26,12 @@ class Payloads:
     """The Payloads class which contains all the AngularJS sandbox escape payloads.
 
     Attributes:
+        __cache (obj): Cached lists of payloads for specific AngularJS versions.
         __payloads list(obj): All the AngularJS sandbox escape payloads.
 
     """
+
+    __cache = {}
 
     __payloads = [
         {
@@ -121,4 +124,34 @@ class Payloads:
 
         """
 
-        return []
+        if version in Payloads.__cache:
+            return Payloads.__cache[version]
+
+        payloads = []
+
+        for payload in Payloads.__payloads:
+            if Payloads.version_is_in_range(version, payload["min"], payload["max"]):
+                payloads.append(payload["value"])
+
+        Payloads.__cache[version] = payloads
+        return payloads
+
+    @staticmethod
+    def version_is_in_range(version, minimum, maximum):
+        """Check if the given version is within the given range.
+
+        Args:
+            version (str): The AngularJS version to check.
+            minimum (str): The minimum version.
+            maximum (str): The maximum version.
+
+        Returns:
+            bool: True if in range, False otherwise
+
+        """
+
+        version = int(version.replace(".", "").ljust(10, "0"))
+        minimum = int(minimum.replace(".", "").ljust(10, "0"))
+        maximum = int(maximum.replace(".", "").ljust(10, "0"))
+
+        return version >= minimum and version <= maximum
