@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#gi -*- coding: utf-8 -*-
 
 # MIT License
 #
@@ -22,7 +22,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import copy
+
+try: # Python 3
+    from urllib.parse import urlparse, parse_qsl
+except: # Python 2
+    from urlparse import urlparse, parse_qsl
+
 from acstis.actions.BaseAction import BaseAction
+from nyawc.helpers.URLHelper import URLHelper
+from acstis.Payloads import Payloads
 
 class QueryDataAction(BaseAction):
     """Add the payload to the GET query data from the queue item.
@@ -53,4 +62,46 @@ class QueryDataAction(BaseAction):
 
         items = []
 
+        params = self.get_url_params(self.get_item().request.url)
+
+        if not params:
+            return items
+
+        for (key, value) in params.items():
+            for payload in self.__payloads:
+                queue_item = self.get_item_copy()
+                verify_item = self.get_item_copy()
+                new_params = copy.deepcopy(params)
+
+                new_params[key] = payload
+                queue_item.payload = payload
+                queue_item.request.url = URLHelper.append_with_data(
+                    queue_item.request.url,
+                    new_params
+                )
+
+                new_params[key] = Payloads.get_verify_payload(payload)
+                verify_item.payload = Payloads.get_verify_payload(payload)
+                verify_item.request.url = URLHelper.append_with_data(
+                    verify_item.request.url,
+                    new_params
+                )
+
+                queue_item.verify_item = verify_item
+                items.append(queue_item)
+
         return items
+
+    def get_url_params(self, url):
+        """Get a dict of URL query parameters from the given URL.
+
+        Args:
+            url str: The given URL to get parameters from.
+
+        Returns:
+            obj: The dict of query parameters.
+
+        """
+
+        parsed = urlparse(url)
+        return dict(parse_qsl(parsed.query))

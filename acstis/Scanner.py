@@ -23,19 +23,23 @@
 # SOFTWARE.
 
 import requests
+import html
 
 from acstis.Payloads import Payloads
+from acstis.helpers.BrowserHelper import BrowserHelper
 from acstis.actions.TraverseUrlAction import TraverseUrlAction
 from acstis.actions.FormDataAction import FormDataAction
 from acstis.actions.QueryDataAction import QueryDataAction
+from nyawc.http.Handler import Handler as HTTPHandler
 
 class Scanner:
-    """The BaseAction can be used to create other actions.
+    """The Scanner scans specific queue items on sandbox escaping/bypassing.
 
     Attributes:
         scanned_hashes list(str): A list of scanned queue item hashes.
         __actions list(:class:`acstis.actions.BaseAction`): The actions to perform on the queue item.
         __driver (:class:`acstis.Driver`): Used to check if we should stop scanning.
+        __verify_payload (bool): Verify if the payload was executed.
         __queue_item (:class:`nyawc.QueueItem`): The queue item to perform actions on.
         __session (obj): A Python requests session.
 
@@ -43,17 +47,19 @@ class Scanner:
 
     scanned_hashes = []
 
-    def __init__(self, driver, angular_version, queue_item):
+    def __init__(self, driver, angular_version, verify_payload, queue_item):
         """Initialize a scanner for the given queue item.
 
         Args:
             driver (:class:`acstis.Driver`): Used to check if we should stop scanning.
             angular_version (str): The AngularJS version of the given queue_item (e.g. `1.4.2`).
+            verify_payload (bool): Verify if the payload was executed.
             queue_item (:class:`nyawc.QueueItem`): The queue item to scan.
 
         """
 
         self.__driver = driver
+        self.__verify_payload = verify_payload
         self.__queue_item = queue_item
         self.__session = requests.Session()
 
@@ -91,13 +97,13 @@ class Scanner:
 
                 self.scanned_hashes.append(item.get_hash())
 
-                if self.is_item_vulnerable(item):
+                if self.__is_item_vulnerable(item):
                     results.append(item)
 
         return results
 
-    def is_item_vulnerable(self, queue_item):
-        """Check if the given queue item is vulnerable by executing it using the HttpHandler.
+    def __is_item_vulnerable(self, queue_item):
+        """Check if the given queue item is vulnerable by executing it using the HttpHandler and checking if the payload is in scope.
 
         Args:
             queue_item (:class:`nyawc.QueueItem`): The queue item to check.
@@ -107,56 +113,64 @@ class Scanner:
 
         """
 
+
         try:
-            queue_item.response = self.__make_request(
-                queue_item.request.url,
-                queue_item.request.method,
-                queue_item.request.data,
-                queue_item.request.auth,
-                queue_item.request.cookies,
-                queue_item.request.headers,
-                queue_item.request.proxies,
-                15
-            )
-
-            try:
-                queue_item.response.raise_for_status()
-            except Exception:
-                return False
-
+            HTTPHandler(None, queue_item)
         except Exception:
             return False
 
+        if not queue_item.get_soup_response():
+            return False
+
+        if not self.__should_payload_execute(queue_item):
+            return False
+
+        if self.__verify_payload:
+            if not self.__verify_queue_item(queue_item.verify_item):
+                return False
+
         return True
 
-
-    def __make_request(self, url, method, data, auth, cookies, headers, proxies, timeout):
-        """Execute a request with the given data.
+    def __should_payload_execute(self, queue_item):
+        """Run static checks to see if the payload should be executed.
 
         Args:
-            url (str): The URL to call.
-            method (str): The method (e.g. `get` or `post`).
-            data (str): The data to call the URL with.
-            auth (obj): The authentication class.
-            cookies (obj): The cookie dict.
-            headers (obj): The header dict.
-            proxies (obj): The proxies dict.
-            timeout (int): The request timeout in seconds
+            queue_item (:class:`nyawc.QueueItem`): The queue item to check.
 
         Returns:
-            obj: The response object.
+            bool: True if payload should execute, false otherwise.
 
         """
 
-        request_by_method = getattr(self.__session, method)
-        return request_by_method(
-            url=url,
-            data=data,
-            auth=auth,
-            cookies=cookies,
-            headers=headers,
-            proxies=proxies,
-            timeout=timeout,
-            allow_redirects=True,
-            stream=False
-        )
+        soup = queue_item.get_soup_response()
+
+        ng_app_soup = soup.select("[ng-app]")
+        if not ng_app_soup:
+            return False
+
+        for non_bindable in ng_app_soup[0].select("[ng-non-bindable]"):
+            non_bindable.decompose()
+
+        in_scope_html = str(ng_app_soup[0])
+
+        if queue_item.payload in html.unescape(in_scope_html):
+            return True
+
+        if queue_item.payload in in_scope_html:
+            return True
+
+        return False
+
+    def __verify_queue_item(self, queue_item):
+        """Verify if the browser opened a new window.
+
+        Args:
+            queue_item (:class:`nyawc.QueueItem`): The queue item to check.
+
+        Returns:
+            bool: True if the payload worked, false otherwise.
+
+        """
+
+        browser = BrowserHelper.request(queue_item)
+        return len(browser.window_handles) == 2

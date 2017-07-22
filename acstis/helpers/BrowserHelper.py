@@ -24,20 +24,53 @@
 
 import os
 import sys
+import json
 import ctypes
 import colorlog
 
 from selenium import webdriver
+from nyawc.http.Request import Request
+
+try: # Python 3
+    from urllib.parse import quote
+except: # Python 2
+    from urlparse import quote
 
 class BrowserHelper:
     """The BrowserHelper enables headless web browsing."""
 
     @staticmethod
-    def javascript(url, command):
-        """Execute a JavaScript command on the given URL.
+    def request(queue_item):
+        """Execute the given queue item and return the browser instance.
 
         Args:
-            url (str): URL to navigate to and execute the JavaScript on.
+            queue_item (:class:`nyawc.QueueItem`): The queue item to execute the JavaScript on.
+
+        Returns:
+            obj: The browser instance reference.
+
+        """
+
+        try:
+            browser = BrowserHelper.__get_browser()
+
+            if queue_item.request.method == Request.METHOD_POST:
+                browser.get('about:blank')
+                browser.execute_script('window.doRequest=function(a,b,c){c=c||"post";var d=document.createElement("form");d.setAttribute("method",c),d.setAttribute("action",a),b=decodeURIComponent(b),b=JSON.parse(b);for(var e in b)if(b.hasOwnProperty(e)){var f=document.createElement("input");f.setAttribute("type","hidden"),f.setAttribute("name",e),f.setAttribute("value",b[e]),d.appendChild(f)}document.body.appendChild(d),d.submit()}')
+                browser.execute_script('window.doRequest("{}", `{}`, "{}");'.format(queue_item.request.url, quote(json.dumps(queue_item.request.data)), queue_item.request.method));
+            else:
+                browser.get(queue_item.request.url)
+
+            return browser
+        except Exception as e:
+            return None
+
+    @staticmethod
+    def javascript(queue_item, command):
+        """Execute a JavaScript command on the given queue item.
+
+        Args:
+            queue_item (:class:`nyawc.QueueItem`): The queue item to execute the JavaScript on.
             command (str): The JavaScript command.
 
         Returns:
@@ -46,8 +79,7 @@ class BrowserHelper:
         """
 
         try:
-            browser = BrowserHelper.__get_browser()
-            browser.get(url)
+            browser = BrowserHelper.request(queue_item)
             response = browser.execute_script(command)
             browser.quit()
         except Exception as e:

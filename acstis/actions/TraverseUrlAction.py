@@ -23,6 +23,7 @@
 # SOFTWARE.
 
 from acstis.actions.BaseAction import BaseAction
+from acstis.Payloads import Payloads
 
 class TraverseUrlAction(BaseAction):
     """Traverse the payload in the URL from the queue item.
@@ -64,14 +65,22 @@ class TraverseUrlAction(BaseAction):
         for index in range(0, len(parts)):
             for payload in self.__payloads:
                 queue_item = self.get_item_copy()
-
+                verify_item = self.get_item_copy()
                 path = "/".join(parts[0:index])
-                path_with_affix = ("/" if path else "") + path + "/" + payload
 
+                path_with_affix = ("/" if path else "") + path + "/" + payload
                 parsed = self.get_parsed_url(queue_item.request.url)
                 parsed = parsed._replace(path=path_with_affix, query="")
                 queue_item.request.url = parsed.geturl()
+                queue_item.payload = payload
 
+                path_with_affix = ("/" if path else "") + path + "/" + Payloads.get_verify_payload(payload)
+                parsed = self.get_parsed_url(verify_item.request.url)
+                parsed = parsed._replace(path=path_with_affix, query="")
+                verify_item.request.url = parsed.geturl()
+                verify_item.payload = Payloads.get_verify_payload(payload)
+
+                queue_item.verify_item = verify_item
                 items.append(queue_item)
 
         return items

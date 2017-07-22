@@ -48,6 +48,8 @@ def require_arguments():
 
     required.add_argument("-d", "--domain", help="the domain to scan (e.g. finnwea.com)", required=True)
 
+    optional.add_argument("-vp", "--verify-payload", help="use a javascript engine to verify if the payload was executed (otherwise false positives may occur)", action="store_true")
+    optional.add_argument("-av", "--angular-version", help="manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work", type=str)
     optional.add_argument("-pmm", "--protocol-must-match", help="only scan pages with the same protocol as the startpoint (e.g. only https)", action="store_true")
     optional.add_argument("-sos", "--scan-other-subdomains", help="also scan pages that have another subdomain than the startpoint", action="store_true")
     optional.add_argument("-soh", "--scan-other-hostnames", help="also scan pages that have another hostname than the startpoint", action="store_true")

@@ -30,6 +30,7 @@ from nyawc.QueueItem import QueueItem
 from nyawc.Crawler import Crawler
 from nyawc.CrawlerActions import CrawlerActions
 from nyawc.http.Request import Request
+from nyawc.http.Response import Response
 from acstis.helpers.BrowserHelper import BrowserHelper
 from acstis.helpers.PackageHelper import PackageHelper
 from acstis.Scanner import Scanner
@@ -87,28 +88,44 @@ class Driver:
 
         colorlog.getLogger().warning("Received SIGINT, stopping the crawling threads safely. This could take up to 30 seconds (the thread timeout).")
 
-    def start(self):
-        """Start the crawler."""
+    def __set_angular_version(self):
+        """Find and set the AngularJS version as class attribute
+
+        Returns:
+            str: True if found and set, False otherwise.
+
+        """
+
+        if self.__args.angular_version:
+            self.__angular_version = self.__args.angular_version
+            colorlog.getLogger().info("Found AngularJS version " + self.__angular_version + " in the arguments.")
+            return True
 
         colorlog.getLogger().info("Looking for AngularJS version using a headless browser.")
         colorlog.getLogger().info("Waiting until DOM is completely loaded.")
 
         self.__angular_version = BrowserHelper.javascript(
-            self.__args.domain,
+            QueueItem(Request(self.__args.domain), Response(self.__args.domain)),
             "return angular.version.full"
         )
 
-        if not self.__angular_version:
-            colorlog.getLogger().error("Couldn't determine the AngularJS version (`angular.version.full` threw an exception).")
-            return
+        if self.__angular_version:
+            colorlog.getLogger().info("Found AngularJS version " + self.__angular_version + ".")
+            return True
 
-        colorlog.getLogger().info("Found AngularJS version " + self.__angular_version + ".")
+        colorlog.getLogger().error("Couldn't determine the AngularJS version (`angular.version.full` threw an exception).")
+        colorlog.getLogger().error("If you are certain this URL uses AngularJS, specify the version via the `--angular-version` argument.")
+        return False
 
-        crawler = Crawler(self.__options)
-        signal.signal(signal.SIGINT, self.__signal_handler)
+    def start(self):
+        """Start the crawler."""
 
-        startpoint = Request(self.__args.domain)
-        crawler.start_with(startpoint)
+        if self.__set_angular_version():
+            crawler = Crawler(self.__options)
+            signal.signal(signal.SIGINT, self.__signal_handler)
+
+            startpoint = Request(self.__args.domain)
+            crawler.start_with(startpoint)
 
     def cb_crawler_before_start(self):
         """Called before the crawler starts crawling."""
@@ -215,7 +232,7 @@ class Driver:
         if self.stopping:
             return
 
-        queue_item.vulnerable_items = Scanner(self, self.__angular_version, queue_item).get_vulnerable_items()
+        queue_item.vulnerable_items = Scanner(self, self.__angular_version, self.__args.verify_payload, queue_item).get_vulnerable_items()
 
     def __request_to_string(self, request):
         """Convert the given requests to a string representation.

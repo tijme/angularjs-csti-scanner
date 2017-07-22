@@ -23,6 +23,7 @@
 # SOFTWARE.
 
 from acstis.actions.BaseAction import BaseAction
+from acstis.Payloads import Payloads
 
 class FormDataAction(BaseAction):
     """Add the payload to the POST form data from the queue item.
@@ -59,7 +60,15 @@ class FormDataAction(BaseAction):
         for (key, value) in self.get_item().request.data.items():
             for payload in self.__payloads:
                 queue_item = self.get_item_copy()
+                verify_item = self.get_item_copy()
+
                 queue_item.request.data[key] = payload
+                queue_item.payload = payload
+
+                verify_item.request.data[key] = Payloads.get_verify_payload(payload)
+                verify_item.payload = Payloads.get_verify_payload(payload)
+
+                queue_item.verify_item = verify_item
                 items.append(queue_item)
 
         return items

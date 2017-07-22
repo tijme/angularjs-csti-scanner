@@ -22,6 +22,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+try: # Python 3
+    from urllib.parse import quote_plus
+except: # Python 2
+    from urlparse import quote_plus
+
 class Payloads:
     """The Payloads class which contains all the AngularJS sandbox escape payloads.
 
@@ -133,6 +138,9 @@ class Payloads:
             if Payloads.version_is_in_range(version, payload["min"], payload["max"]):
                 payloads.append(payload["value"])
 
+                # I'm currently not sure if we really need an encoded payload
+                # payloads.append(quote_plus(payload["value"]))
+
         Payloads.__cache[version] = payloads
         return payloads
 
@@ -155,3 +163,22 @@ class Payloads:
         maximum = int(maximum.replace(".", "").ljust(10, "0"))
 
         return version >= minimum and version <= maximum
+
+    @staticmethod
+    def get_verify_payload(payload):
+        """Replace `alert` with `open` so PhantomJS checks can be done.
+
+        Args:
+            payload (str): The current payload.
+
+        Returns:
+            str: The new payload.
+
+        Note:
+            PhantomJS does not support switching to alerts, which is why we need
+            the `open` call, which opens a new window. So if the open window count
+            is 2, the payload worked.
+
+        """
+
+        return payload.replace('alert', 'open')
