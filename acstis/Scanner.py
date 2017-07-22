@@ -113,7 +113,6 @@ class Scanner:
 
         """
 
-
         try:
             HTTPHandler(None, queue_item)
         except Exception:

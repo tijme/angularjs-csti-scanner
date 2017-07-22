@@ -27,14 +27,17 @@ import sys
 import json
 import ctypes
 import colorlog
+import requests.cookies
 
 from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from nyawc.helpers.URLHelper import URLHelper
 from nyawc.http.Request import Request
 
 try: # Python 3
-    from urllib.parse import quote
+    from urllib.parse import quote, urlparse
 except: # Python 2
-    from urlparse import quote
+    from urlparse import quote, urlparse
 
 class BrowserHelper:
     """The BrowserHelper enables headless web browsing."""
@@ -52,7 +55,7 @@ class BrowserHelper:
         """
 
         try:
-            browser = BrowserHelper.__get_browser()
+            browser = BrowserHelper.__get_browser(queue_item)
 
             if queue_item.request.method == Request.METHOD_POST:
                 browser.get('about:blank')
@@ -88,16 +91,74 @@ class BrowserHelper:
         return response
 
     @staticmethod
-    def __get_browser():
+    def __get_browser(queue_item=None):
         """Get the PhantomJS browser.
+
+        Args:
+            queue_item (:class:`nyawc.QueueItem`): Use authentication/headers/cookies etc from this queue item (if given).
 
         Returns:
             obj: The PhantomJS Selenium object.
 
         """
 
+        capabilities = dict(DesiredCapabilities.PHANTOMJS)
+        service = []
+
+        if queue_item:
+
+            # Authentication
+            if queue_item.request.auth:
+                queue_item.request.auth(queue_item.request)
+
+            # Headers
+            if queue_item.request.headers:
+                for (key, value) in queue_item.request.headers.items():
+                    if key.lower() == "user-agent":
+                        capabilities["phantomjs.page.settings.userAgent"] = value
+                    else:
+                        capabilities["phantomjs.page.settings." + key] = value
+
+            # Proxies
+            if queue_item.request.proxies:
+                service.extend(BrowserHelper.__proxies_to_service_args(queue_item.request.proxies))
+
         driver = BrowserHelper.__get_phantomjs_driver()
-        return webdriver.PhantomJS(executable_path=driver)
+        return webdriver.PhantomJS(
+            executable_path=driver,
+            desired_capabilities=capabilities,
+            service_args=service
+        )
+
+    @staticmethod
+    def __proxies_to_service_args(proxies):
+        """Get the proxy details in a service args array.
+
+        Args:
+            proxies (obj): An `requests` proxies object.
+
+        Returns:
+            list: The service args containing proxy details
+
+        """
+
+        service_args = []
+
+        parsed = urlparse(list(proxies.values())[0])
+
+        if parsed.scheme.startswith("http"):
+            service_args.append("--proxy-type=http")
+        else:
+            service_args.append("--proxy-type=" + parsed.scheme)
+
+        host_and_port = parsed.netloc.split("@")[-1]
+        service_args.append("--proxy=" + host_and_port)
+
+        if len(parsed.netloc.split("@")) == 2:
+            user_pass = parsed.netloc.split("@")[0]
+            service_args.append("--proxy-auth=" + user_pass)
+
+        return service_args
 
     @staticmethod
     def __get_phantomjs_driver():
