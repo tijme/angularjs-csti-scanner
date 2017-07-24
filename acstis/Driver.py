@@ -255,3 +255,27 @@ class Driver:
             data += "&".join(key_values)
 
         return request.method.upper() + "(" + data + "): " + request.url
+
+class Namespace:
+    """An ArgumentParser namespace mockup for if the driver is called manually (using code instead of CLI)."""
+
+    def __init__(self, **kwargs):
+        """Initialize the namespace with the given arguments."""
+
+        self.__dict__.update(kwargs)
+
+    def __getattr__(self, name):
+        """Return values that exists, otherwise return None.
+
+        Args:
+            name (str): The name of the key to look for.
+
+        Returns:
+            str: The value in the dict or None.
+
+        """
+
+        if name in self.__dict__:
+            return object.__getattribute__(self, name)
+        else:
+            return None
