@@ -48,7 +48,47 @@ First make sure you're on `Python 2.7/3.3 <https://www.python.org/>`__ or higher
 Usage
 -----
 
-#ToDo
+**Scan a single URL**
+
+``acstis -d https://finnwea.com/some/page/?category=23``
+
+**Scan a single URL (and verify that the alert pops)**
+
+``acstis -vp -d https://finnwea.com/some/page/?category=23``
+
+**Scan an entire domain**
+
+``acstis -c -d https://finnwea.com/``
+
+**Scan an entire domain (and stop if a vulnerability was found)**
+
+``acstis -c -siv -d https://finnwea.com/``
+
+**All command line options**
+
+.. code:: text
+
+   usage: acstis [-h] -d DOMAIN [-c] [-vp] [-av ANGULAR_VERSION] [-pmm] [-sos] [-soh] [-sot] [-siv] [-md MAX_DEPTH] [-mt MAX_THREADS]
+
+   required arguments:
+       -d DOMAIN, --domain DOMAIN                              the domain to scan (e.g. finnwea.com)
+
+   optional arguments:
+       -h, --help                                              show this help message and exit
+       -c, --crawl                                             use the crawler to scan all the entire domain
+       -vp, --verify-payload                                   use a javascript engine to verify if the payload was executed (otherwise false positives may occur)
+       -av ANGULAR_VERSION, --angular-version ANGULAR_VERSION  manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work
+       -pmm, --protocol-must-match                             (crawler option) only scan pages with the same protocol as the startpoint (e.g. only https)
+       -sos, --scan-other-subdomains                           (crawler option) also scan pages that have another subdomain than the startpoint
+       -soh, --scan-other-hostnames                            (crawler option) also scan pages that have another hostname than the startpoint
+       -sot, --scan-other-tlds                                 (crawler option) also scan pages that have another tld than the startpoint
+       -siv, --stop-if-vulnerable                              (crawler option) stop scanning if a vulnerability was found
+       -md MAX_DEPTH, --max-depth MAX_DEPTH                    (crawler option) the maximum search depth (default is unlimited)
+       -mt MAX_THREADS, --max-threads MAX_THREADS              (crawler option) the maximum amount of simultaneous threads to use (default is 8)
+
+**Authentication, Proxies, Cookies, Headers & Scope options**
+
+These options are not implemented in the command line interface of ACSTIS. Please use the scripts in the `examples <https://github.com/tijme/angularjs-csti-scanner/tree/master/examples>`_ folder to implement them.
 
 Issues
 ------

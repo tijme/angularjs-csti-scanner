@@ -40,7 +40,7 @@ def require_arguments():
 
     parser = argparse.ArgumentParser(
         prog=PackageHelper.get_alias(),
-        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=150, width=150)
+        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=160, width=160)
     )
 
     optional = parser._action_groups.pop()
@@ -48,15 +48,16 @@ def require_arguments():
 
     required.add_argument("-d", "--domain", help="the domain to scan (e.g. finnwea.com)", required=True)
 
+    optional.add_argument("-c", "--crawl", help="use the crawler to scan all the entire domain", action="store_true")
     optional.add_argument("-vp", "--verify-payload", help="use a javascript engine to verify if the payload was executed (otherwise false positives may occur)", action="store_true")
     optional.add_argument("-av", "--angular-version", help="manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work", type=str)
-    optional.add_argument("-pmm", "--protocol-must-match", help="only scan pages with the same protocol as the startpoint (e.g. only https)", action="store_true")
-    optional.add_argument("-sos", "--scan-other-subdomains", help="also scan pages that have another subdomain than the startpoint", action="store_true")
-    optional.add_argument("-soh", "--scan-other-hostnames", help="also scan pages that have another hostname than the startpoint", action="store_true")
-    optional.add_argument("-sot", "--scan-other-tlds", help="also scan pages that have another tld than the startpoint", action="store_true")
-    optional.add_argument("-siv", "--stop-if-vulnerable", help="stop scanning if a vulnerability was found", action="store_true")
-    optional.add_argument("-md", "--max-depth", help="the maximum search depth (default is unlimited)", type=int)
-    optional.add_argument("-mt", "--max-threads", help="the maximum amount of simultaneous threads to use (default is 8)", type=int, default=8)
+    optional.add_argument("-pmm", "--protocol-must-match", help="(crawler option) only scan pages with the same protocol as the startpoint (e.g. only https)", action="store_true")
+    optional.add_argument("-sos", "--scan-other-subdomains", help="(crawler option) also scan pages that have another subdomain than the startpoint", action="store_true")
+    optional.add_argument("-soh", "--scan-other-hostnames", help="(crawler option) also scan pages that have another hostname than the startpoint", action="store_true")
+    optional.add_argument("-sot", "--scan-other-tlds", help="(crawler option) also scan pages that have another tld than the startpoint", action="store_true")
+    optional.add_argument("-siv", "--stop-if-vulnerable", help="(crawler option) stop scanning if a vulnerability was found", action="store_true")
+    optional.add_argument("-md", "--max-depth", help="(crawler option) the maximum search depth (default is unlimited)", type=int)
+    optional.add_argument("-mt", "--max-threads", help="(crawler option) the maximum amount of simultaneous threads to use (default is 8)", type=int, default=8)
 
     parser._action_groups.append(optional)
     return parser.parse_args()
@@ -128,7 +129,7 @@ def main():
     options.scope.subdomain_must_match = not args.scan_other_subdomains
     options.scope.hostname_must_match = not args.scan_other_hostnames
     options.scope.tld_must_match = not args.scan_other_tlds
-    options.scope.max_depth = args.max_depth
+    options.scope.max_depth = args.max_depth if args.crawl else 0
     options.performance.max_threads = args.max_threads
 
     driver = Driver(args, options)

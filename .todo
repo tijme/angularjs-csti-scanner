@@ -1,6 +1,3 @@
-* Add example with authentication/cookies etc
-* Add usage details to README.rst
-
 * Add unit-tests for all AngularJS versions
 * Add unit-tests for payloads on 404 pages
 * Add unit-tests for payloads outside ng-app or inside ng-non-bindable
