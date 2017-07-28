@@ -137,6 +137,7 @@ class Payloads:
         for payload in Payloads.__payloads:
             if Payloads.version_is_in_range(version, payload["min"], payload["max"]):
                 payloads.append(payload["value"])
+                payloads.append(quote_plus(payload["value"]))
 
         Payloads.__cache[version] = payloads
         return payloads

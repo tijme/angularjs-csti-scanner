@@ -75,16 +75,18 @@ class QueryDataAction(BaseAction):
 
                 new_params[key] = payload
                 queue_item.payload = payload
-                queue_item.request.url = URLHelper.append_with_data(
+                queue_item.request.url = self.append_with_raw_params(
                     queue_item.request.url,
-                    new_params
+                    new_params,
+                    key
                 )
 
                 new_params[key] = Payloads.get_verify_payload(payload)
                 verify_item.payload = Payloads.get_verify_payload(payload)
-                verify_item.request.url = URLHelper.append_with_data(
+                verify_item.request.url = self.append_with_raw_params(
                     verify_item.request.url,
-                    new_params
+                    new_params,
+                    key
                 )
 
                 queue_item.verify_item = verify_item
@@ -96,7 +98,7 @@ class QueryDataAction(BaseAction):
         """Get a dict of URL query parameters from the given URL.
 
         Args:
-            url str: The given URL to get parameters from.
+            url (str): The given URL to get parameters from.
 
         Returns:
             obj: The dict of query parameters.
@@ -105,3 +107,25 @@ class QueryDataAction(BaseAction):
 
         parsed = urlparse(url)
         return dict(parse_qsl(parsed.query))
+
+    def append_with_raw_params(self, url, params, raw_key):
+        """Append the given URL with the given params (the param that matches the raw key will not be encoded).
+
+        Args:
+            url (str): The URL to append.
+            params (obj): The parameters to append.
+            raw_key (str): The parameter with this key will not be encoded.
+
+        Returns:
+            str: The new URL.
+
+        """
+
+        raw_value = params[raw_key]
+        del params[raw_key]
+
+        url = URLHelper.append_with_data(url.split("?")[0], params)
+        url += "&" if "?" in url else "?"
+        url += raw_key + "=" + raw_value
+
+        return url

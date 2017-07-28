@@ -1,4 +1,5 @@
-* Add unit-tests for all AngularJS versions
+* [BUG] ?test=asdf&vulnerable= does not work because it doesn't have a value.
+* [BUG] Encoded & decoded payloads have the same hash causing one of them to be ignored.
 * Add unit-tests for payloads on 404 pages
 * Add unit-tests for payloads outside ng-app or inside ng-non-bindable
 * Remove payloads that do not work for the specified version

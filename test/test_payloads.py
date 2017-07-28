@@ -149,8 +149,11 @@ class TestPayloads(unittest.TestCase):
             server.start(url)
 
             try:
+                shell_command = "python acstis.py -vp -av " + version + " -d http://" + server.url + "?vulnerable=payload"
+                print("Testing: " + shell_command)
+
                 process = subprocess.Popen(
-                    "python acstis.py -vp -av " + version + " -d http://" + server.url + "?vulnerable=payload",
+                    shell_command,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     shell=True

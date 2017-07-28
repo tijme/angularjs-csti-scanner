@@ -172,4 +172,4 @@ class Scanner:
         """
 
         browser = BrowserHelper.request(queue_item)
-        return len(browser.window_handles) == 2
+        return len(browser.window_handles) >= 2

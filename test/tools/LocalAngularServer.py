@@ -26,6 +26,11 @@ import re
 import socket
 import threading
 
+try: # Python 3
+    from urllib.parse import unquote
+except: # Python 2
+    from urllib import unquote
+
 class LocalAngularServer:
     """The LocalAngularServer class sets up a local vulnerable AngularJS server.
 
@@ -50,13 +55,13 @@ class LocalAngularServer:
         self.asset = asset
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.bind(("0.0.0.0", 0))
+        self.sock.bind(("127.0.0.1", 0))
         self.sock.listen(1)
 
         self.thread = threading.Thread(target=self.__handler)
         self.thread.start()
 
-        self.url = self.sock.getsockname()[0] + ":" + str(self.sock.getsockname()[1])
+        self.url = "127.0.0.1:" + str(self.sock.getsockname()[1])
 
     def __handler(self):
         """Serve a vulnerable AngularJS application for every HTTP request."""
@@ -67,7 +72,7 @@ class LocalAngularServer:
                 request = csock.recv(1024)
 
                 matches = re.findall(r'GET \/\?vulnerable=(.*) HTTP', request.decode("utf-8"))
-                vulnerableValue = matches[0] if len(matches) == 1 else ""
+                vulnerableValue = unquote(matches[0])  if len(matches) == 1 else ""
 
                 html = """
                     <!DOCTYPE html>
@@ -87,7 +92,6 @@ class LocalAngularServer:
                 csock.close()
         except Exception as e:
             self.running = False
-            print(e)
 
     def stop(self):
         """Stop the websocket."""
