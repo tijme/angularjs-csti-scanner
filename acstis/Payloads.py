@@ -25,7 +25,7 @@
 try: # Python 3
     from urllib.parse import quote_plus
 except: # Python 2
-    from urlparse import quote_plus
+    from urllib import quote_plus
 
 class Payloads:
     """The Payloads class which contains all the AngularJS sandbox escape payloads.
