@@ -112,8 +112,6 @@ class Scanner:
 
         """
 
-        print(queue_item.request.url)
-
         try:
             HTTPHandler(None, queue_item)
         except Exception:

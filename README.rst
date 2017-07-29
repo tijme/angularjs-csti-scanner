@@ -11,6 +11,10 @@
 
    <br class="title">
 
+.. image:: https://travis-ci.org/tijme/angularjs-csti-scanner.svg?branch=master
+   :target: https://travis-ci.org/tijme/angularjs-csti-scanner
+   :alt: Build Status
+
 .. image:: https://img.shields.io/pypi/v/acstis.svg
    :target: https://pypi.python.org/pypi/acstis/
    :alt: PyPi version
