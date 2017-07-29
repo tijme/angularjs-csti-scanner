@@ -168,4 +168,9 @@ class TestPayloads(unittest.TestCase):
 
             server.stop()
 
-            self.assertTrue(True if "Found 1 vulnerable request(s)." in response else False)
+            result = True if "Found 1 vulnerable request(s)." in response else False
+
+            if not result:
+                print(response)
+
+            self.assertTrue(result)

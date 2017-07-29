@@ -37,7 +37,8 @@ from nyawc.http.Request import Request
 try: # Python 3
     from urllib.parse import quote, urlparse
 except: # Python 2
-    from urlparse import quote, urlparse
+    from urllib import quote
+    from urlparse import urlparse
 
 class BrowserHelper:
     """The BrowserHelper enables headless web browsing."""

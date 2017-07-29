@@ -23,7 +23,6 @@
 # SOFTWARE.
 
 import requests
-import html
 
 from acstis.Payloads import Payloads
 from acstis.helpers.BrowserHelper import BrowserHelper
@@ -113,6 +112,8 @@ class Scanner:
 
         """
 
+        print(queue_item.request.url)
+
         try:
             HTTPHandler(None, queue_item)
         except Exception:
@@ -151,9 +152,6 @@ class Scanner:
             non_bindable.decompose()
 
         in_scope_html = str(ng_app_soup[0])
-
-        if queue_item.payload in html.unescape(in_scope_html):
-            return True
 
         if queue_item.payload in in_scope_html:
             return True
