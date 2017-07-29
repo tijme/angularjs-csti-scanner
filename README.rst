@@ -50,19 +50,19 @@ Usage
 
 **Scan a single URL**
 
-``acstis -d https://finnwea.com/some/page/?category=23``
+``acstis -d "https://finnwea.com/some/page/?category=23"``
 
 **Scan a single URL (and verify that the alert pops)**
 
-``acstis -vp -d https://finnwea.com/some/page/?category=23``
+``acstis -vp -d "https://finnwea.com/some/page/?category=23"``
 
 **Scan an entire domain**
 
-``acstis -c -d https://finnwea.com/``
+``acstis -c -d "https://finnwea.com/"``
 
 **Scan an entire domain (and stop if a vulnerability was found)**
 
-``acstis -c -siv -d https://finnwea.com/``
+``acstis -c -siv -d "https://finnwea.com/"``
 
 **All command line options**
 
@@ -89,6 +89,13 @@ Usage
 **Authentication, Proxies, Cookies, Headers & Scope options**
 
 These options are not implemented in the command line interface of ACSTIS. Please use the scripts in the `examples <https://github.com/tijme/angularjs-csti-scanner/tree/master/examples>`_ folder to implement them.
+
+Testing
+-------
+
+The testing can and will automatically be done by `Travis CI <https://travis-ci.org/tijme/angularjs-csti-scanner>`__ on every push. If you want to manually run the unit tests, use the command below.
+
+``$ python -m unittest discover``
 
 Issues
 ------
