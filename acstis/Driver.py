@@ -22,6 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import sys
 import signal
 import colorlog
 
@@ -127,6 +128,9 @@ class Driver:
             startpoint = Request(self.__args.domain)
             crawler.start_with(startpoint)
 
+        # Exit the process with the correct status code
+        sys.exit(not self.__vulnerable_items)
+
     def cb_crawler_before_start(self):
         """Called before the crawler starts crawling."""
 
@@ -153,7 +157,6 @@ class Driver:
                 colorlog.getLogger().success(self.__request_to_string(vulnerable_item.request))
         else:
             colorlog.getLogger().warning("Couldn't find any vulnerable requests.")
-
 
     def cb_request_before_start(self, queue, queue_item):
         """Crawler callback (called before a request starts).

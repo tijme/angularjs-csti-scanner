@@ -61,7 +61,10 @@ setup(
     packages=find_packages(),
     package_data={
         "acstis": [
-            ".semver"
+            "phantomjs/linux32-2.1.1",
+            "phantomjs/linux64-2.1.1",
+            "phantomjs/mac-2.1.1",
+            "phantomjs/win-2.1.1.exe"
         ]
     },
     entry_points = {

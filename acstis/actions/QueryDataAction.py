@@ -80,6 +80,7 @@ class QueryDataAction(BaseAction):
                     new_params
                 )
 
+
                 new_params[key] = Payloads.get_verify_payload(payload)
                 verify_item.payload = Payloads.get_verify_payload(payload)
                 verify_item.request.url = URLHelper.append_with_data(
