@@ -232,7 +232,7 @@ class Driver:
 
         queue_item.vulnerable_items = []
 
-        if self.stopping:
+        if self.stopping or not hasattr(queue_item.response, "text"):
             return
 
         queue_item.vulnerable_items = Scanner(self, self.__angular_version, self.__args.verify_payload, queue_item).get_vulnerable_items()
