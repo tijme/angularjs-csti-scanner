@@ -151,7 +151,7 @@ class Scanner:
 
         in_scope_html = str(ng_app_soup[0])
 
-        if queue_item.payload in in_scope_html:
+        if queue_item.payload["value"] in in_scope_html:
             return True
 
         return False

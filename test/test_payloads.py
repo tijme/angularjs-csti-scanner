@@ -153,10 +153,9 @@ class TestPayloads(unittest.TestCase):
     def test_payloads(self):
         """Check if every single (stable) AngularJS version throws an alert using ACSTIS."""
 
-
         for (version, url) in self.angular_assets.items():
             server = LocalAngularServer()
-            server.start(url)
+            server.start(LocalAngularServer.HANDLER_VULNERABLE_TEST, {"asset": url})
 
             try:
                 shell_command = ["python", "acstis.py", "--verify-payload", "--angular-version", version, "--domain", "http://" + server.url + "?vulnerable=payload"]
@@ -167,13 +166,11 @@ class TestPayloads(unittest.TestCase):
                     shell_command
                 )
 
-                exitcode = process.wait(timeout=30)
-                # process.kill()
+                exitcode = process.wait()
             except Exception as e:
                 print(e)
                 exitcode = 1
 
             server.stop()
 
-            self.assertTrue(not exitcode)
-
+            self.assertEqual(exitcode, 0)

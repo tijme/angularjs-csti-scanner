@@ -25,6 +25,7 @@
 import sys
 import signal
 import colorlog
+import traceback
 
 from requests_toolbelt import user_agent
 from nyawc.QueueItem import QueueItem
@@ -155,6 +156,9 @@ class Driver:
 
             for vulnerable_item in self.__vulnerable_items:
                 colorlog.getLogger().success(self.__request_to_string(vulnerable_item.request))
+
+                if vulnerable_item.payload["message"]:
+                    colorlog.getLogger().warning(vulnerable_item.payload["message"])
         else:
             colorlog.getLogger().warning("Couldn't find any vulnerable requests.")
 
@@ -199,6 +203,9 @@ class Driver:
         for vulnerable_item in queue_item.vulnerable_items:
             colorlog.getLogger().success(self.__request_to_string(vulnerable_item.request))
 
+            if vulnerable_item.payload["message"]:
+                colorlog.getLogger().warning(vulnerable_item.payload["message"])
+
         if self.__vulnerable_items and self.__args.stop_if_vulnerable:
             self.stopping = True
             return CrawlerActions.DO_STOP_CRAWLING
@@ -235,7 +242,11 @@ class Driver:
         if self.stopping or not hasattr(queue_item.response, "text"):
             return
 
-        queue_item.vulnerable_items = Scanner(self, self.__angular_version, self.__args.verify_payload, queue_item).get_vulnerable_items()
+        try:
+            queue_item.vulnerable_items = Scanner(self, self.__angular_version, self.__args.verify_payload, queue_item).get_vulnerable_items()
+        except Exception as e:
+            print(e)
+            print(traceback.format_exc())
 
     def __request_to_string(self, request):
         """Convert the given requests to a string representation.

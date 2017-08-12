@@ -1,8 +1,0 @@
-* Add unit-tests for payloads on 404 pages
-* Add unit-tests for payloads outside ng-app or inside ng-non-bindable
-* Remove payloads that do not work for the specified version
-* Remove .todo file
-
-Next version:
-* Add "Payload was partially reflected" if e.g. input field has a maximum length
-* Add message to certain payloads (e.g. on sort(), it only works in Chrome if you reverse the order)

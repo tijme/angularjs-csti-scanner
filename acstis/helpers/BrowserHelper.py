@@ -45,7 +45,7 @@ class BrowserHelper:
     """The BrowserHelper enables headless web browsing.
 
     Attributes:
-        __phantomjs_driver (str): The path to the executable PhantomJS driver.
+        __phantomjs_driver (str): The cached path to the executable PhantomJS driver.
 
     """
 

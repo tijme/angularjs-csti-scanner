@@ -29,7 +29,7 @@ class FormDataAction(BaseAction):
     """Add the payload to the POST form data from the queue item.
 
     Attributes:
-        __payloads list(str): The payloads to add to the form data.
+        __payloads list(obj): The payloads to add to the form data.
 
     """
 
@@ -37,7 +37,7 @@ class FormDataAction(BaseAction):
         """Constructs a FormDataAction instance.
 
         Args:
-            payloads list(str): The payloads to add to the form data.
+            payloads list(obj): The payloads to add to the form data.
 
         """
 
@@ -62,10 +62,10 @@ class FormDataAction(BaseAction):
                 queue_item = self.get_item_copy()
                 verify_item = self.get_item_copy()
 
-                queue_item.request.data[key] = payload
+                queue_item.request.data[key] = payload["value"]
                 queue_item.payload = payload
 
-                verify_item.request.data[key] = Payloads.get_verify_payload(payload)
+                verify_item.request.data[key] = Payloads.get_verify_payload(payload)["value"]
                 verify_item.payload = Payloads.get_verify_payload(payload)
 
                 queue_item.verify_item = verify_item

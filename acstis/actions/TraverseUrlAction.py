@@ -29,7 +29,7 @@ class TraverseUrlAction(BaseAction):
     """Traverse the payload in the URL from the queue item.
 
     Attributes:
-        __payloads list(str): The payloads to traverse in the URL.
+        __payloads list(obj): The payloads to traverse in the URL.
 
     """
 
@@ -37,7 +37,7 @@ class TraverseUrlAction(BaseAction):
         """Constructs a TraverseUrlAction instance.
 
         Args:
-            payloads list(str): The payloads to traverse in the URL.
+            payloads list(obj): The payloads to traverse in the URL.
 
         """
 
@@ -68,13 +68,13 @@ class TraverseUrlAction(BaseAction):
                 verify_item = self.get_item_copy()
                 path = "/".join(parts[0:index])
 
-                path_with_affix = ("/" if path else "") + path + "/" + payload
+                path_with_affix = ("/" if path else "") + path + "/" + payload["value"]
                 parsed = self.get_parsed_url(queue_item.request.url)
                 parsed = parsed._replace(path=path_with_affix, query="")
                 queue_item.request.url = parsed.geturl()
                 queue_item.payload = payload
 
-                path_with_affix = ("/" if path else "") + path + "/" + Payloads.get_verify_payload(payload)
+                path_with_affix = ("/" if path else "") + path + "/" + Payloads.get_verify_payload(payload)["value"]
                 parsed = self.get_parsed_url(verify_item.request.url)
                 parsed = parsed._replace(path=path_with_affix, query="")
                 verify_item.request.url = parsed.geturl()

@@ -37,7 +37,7 @@ class QueryDataAction(BaseAction):
     """Add the payload to the GET query data from the queue item.
 
     Attributes:
-        __payloads list(str): The payloads to add to the query data.
+        __payloads list(obj): The payloads to add to the query data.
 
     """
 
@@ -45,7 +45,7 @@ class QueryDataAction(BaseAction):
         """Constructs a QueryDataAction instance.
 
         Args:
-            payloads list(str): The payloads to add to the query data.
+            payloads list(obj): The payloads to add to the query data.
 
         """
 
@@ -73,15 +73,14 @@ class QueryDataAction(BaseAction):
                 verify_item = self.get_item_copy()
                 new_params = copy.deepcopy(params)
 
-                new_params[key] = payload
+                new_params[key] = payload["value"]
                 queue_item.payload = payload
                 queue_item.request.url = URLHelper.append_with_data(
                     queue_item.request.url,
                     new_params
                 )
 
-
-                new_params[key] = Payloads.get_verify_payload(payload)
+                new_params[key] = Payloads.get_verify_payload(payload)["value"]
                 verify_item.payload = Payloads.get_verify_payload(payload)
                 verify_item.request.url = URLHelper.append_with_data(
                     verify_item.request.url,
