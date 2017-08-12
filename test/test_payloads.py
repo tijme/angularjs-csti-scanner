@@ -168,7 +168,7 @@ class TestPayloads(unittest.TestCase):
                 )
 
                 exitcode = process.wait(timeout=30)
-                process.kill()
+                # process.kill()
             except Exception as e:
                 print(e)
                 exitcode = 1
