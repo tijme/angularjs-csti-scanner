@@ -90,9 +90,77 @@ Usage
        -md MAX_DEPTH, --max-depth MAX_DEPTH                    (crawler option) the maximum search depth (default is unlimited)
        -mt MAX_THREADS, --max-threads MAX_THREADS              (crawler option) the maximum amount of simultaneous threads to use (default is 8)
 
-**Authentication, Proxies, Cookies, Headers & Scope options**
+**Authentication, Cookies, Headers, Proxies & Scope options**
 
-These options are not implemented in the command line interface of ACSTIS. Please use the scripts in the `examples <https://github.com/tijme/angularjs-csti-scanner/tree/master/examples>`_ folder to implement them.
+These options are not implemented in the command line interface of ACSTIS. Please download the `extended.py <https://github.com/tijme/angularjs-csti-scanner/blob/master/extended.py>`_ script and extend it with one or more of the following code snippets. You can paste these code snippets in the `main()` method of the `extended.py` script.
+
+*Basic Authentication*
+
+.. code:: python
+
+    options.identity.auth = HTTPBasicAuth("username", "password")
+
+*Digest Authentication*
+
+.. code:: python
+
+    options.identity.auth = HTTPDigestAuth("username", "password")
+
+*Cookies*
+
+.. code:: python
+
+    options.identity.cookies.set(name='tasty_cookie', value='yum', domain='finnwea.com', path='/cookies')
+    options.identity.cookies.set(name='gross_cookie', value='blech', domain='finnwea.com', path='/elsewhere')
+
+*Headers*
+
+.. code:: python
+
+    options.identity.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"
+    })
+
+*Proxies*
+
+.. code:: python
+
+    options.identity.proxies = {
+        # No authentication
+        # 'http': 'http://host:port',
+        # 'https': 'http://host:port',
+
+        # Basic authentication
+        # 'http': 'http://user:pass@host:port',
+        # 'https': 'https://user:pass@host:port',
+
+        # SOCKS
+        'http': 'socks5://user:pass@host:port',
+        'https': 'socks5://user:pass@host:port'
+    }
+
+*Scope options*
+
+.. code:: python
+
+    options.scope.protocol_must_match = False
+
+    options.scope.subdomain_must_match = True
+
+    options.scope.hostname_must_match = True
+
+    options.scope.tld_must_match = True
+
+    options.scope.max_depth = None
+
+    options.scope.request_methods = [
+        Request.METHOD_GET,
+        Request.METHOD_POST,
+        Request.METHOD_PUT,
+        Request.METHOD_DELETE,
+        Request.METHOD_OPTIONS,
+        Request.METHOD_HEAD
+    ]
 
 Testing
 -------
@@ -110,3 +178,4 @@ License
 -------
 
 ACSTIS is open-sourced software licensed under the `MIT license <https://github.com/tijme/angularjs-csti-scanner/blob/master/LICENSE.rst>`__.
+nde
