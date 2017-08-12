@@ -25,6 +25,7 @@
 import os
 import sys
 import json
+import stat
 import ctypes
 import colorlog
 import requests.cookies
@@ -41,7 +42,14 @@ except: # Python 2
     from urlparse import urlparse
 
 class BrowserHelper:
-    """The BrowserHelper enables headless web browsing."""
+    """The BrowserHelper enables headless web browsing.
+
+    Attributes:
+        __phantomjs_driver (str): The path to the executable PhantomJS driver.
+
+    """
+
+    __phantomjs_driver = None
 
     @staticmethod
     def request(queue_item):
@@ -170,13 +178,22 @@ class BrowserHelper:
 
         """
 
+        if BrowserHelper.__phantomjs_driver:
+            return BrowserHelper.__phantomjs_driver
+
         path = os.path.dirname(os.path.abspath(__file__))
         bits = ctypes.sizeof(ctypes.c_voidp)
-        x = '32' if bits == 4 else '64'
+        x = "32" if bits == 4 else "64"
 
         if sys.platform == "linux" or sys.platform == "linux2":
-            return path + "/../phantomjs/linux" + x + "-2.1.1"
+            file = path + "/../phantomjs/linux" + x + "-2.1.1"
         elif sys.platform == "darwin":
-            return path + "/../phantomjs/mac-2.1.1"
+            file =  path + "/../phantomjs/mac-2.1.1"
         elif sys.platform == "win32":
-            return path + "/../phantomjs/win-2.1.1"
+            file =  path + "/../phantomjs/win-2.1.1.exe"
+
+        st = os.stat(file)
+        os.chmod(file, st.st_mode | stat.S_IEXEC)
+
+        BrowserHelper.__phantomjs_driver = file
+        return BrowserHelper.__phantomjs_driver
