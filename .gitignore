@@ -1,3 +1,7 @@
+# Custom
+acstis/.semver
+ghostdriver.log
+
 # OS
 Thumbs.db
 .DS_Store
@@ -13,7 +17,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-build/
+/build
 develop-eggs/
 dist/
 downloads/

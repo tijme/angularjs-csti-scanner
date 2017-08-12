@@ -1,5 +1,5 @@
-beautifulsoup4==4.5.3
-colorama==0.3.7
-selenium==3.0.2
-requests==2.13.0
-nyawc==1.5.1
+colorlog==2.10.0
+nyawc==1.7.5
+requests==2.18.1
+requests_toolbelt==0.8.0
+selenium==3.4.3

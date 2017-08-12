@@ -22,18 +22,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from setuptools import find_packages, setup
+import re
 
-with open('requirements.txt') as file:
+from setuptools import find_packages, setup
+from acstis.helpers.PackageHelper import PackageHelper
+
+with open("requirements.txt") as file:
     requirements = file.read().splitlines()
 
+with open("README.rst") as file:
+    readme = PackageHelper.rst_to_pypi(file.read())
+
 setup(
-    version ="2.0.9",
-    name = "acstis",
-    description = "Automated client-side template injection (CSTI, sandbox escape/bypass) detection for AngularJS!",
-    long_description = "",
-    keywords = "angularjs xss xss-scanner exploit angularjs-sandbox-escape vulnerability-scanner",
-    classifiers = [
+    name=PackageHelper.get_alias(),
+    version=PackageHelper.get_version(),
+    description=PackageHelper.get_description(),
+    long_description=readme,
+    keywords = ["vulnerability", "bug-bounty", "security", "angular", "csti", "client-side template injection", "scanner"],
+    classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "Intended Audience :: Developers",
@@ -48,26 +54,28 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 2.7",
         "Topic :: Security"
     ],
-    packages = find_packages(),
-    platforms = ["any"],
-    author = "Tijme Gommers",
-    author_email ="tijme@finnwea.com",
-    license = "MIT",
-    url = "https://github.com/tijme/angularjs-csti-scanner",
-    install_requires = requirements,
+    packages=find_packages(),
+    package_data={
+        "acstis": [
+            "phantomjs/linux32-2.1.1",
+            "phantomjs/linux64-2.1.1",
+            "phantomjs/mac-2.1.1",
+            "phantomjs/win-2.1.1.exe"
+        ]
+    },
     entry_points = {
         'console_scripts': [
             'acstis = acstis_scripts.acstis_cli:main'
         ]
     },
-    package_data={
-        'acstis': [
-            'chrome_drivers/chromedriver_linux32',
-            'chrome_drivers/chromedriver_linux64',
-            'chrome_drivers/chromedriver_mac64',
-            'chrome_drivers/chromedriver_win32.exe'
-        ]
-    }
+    platforms=["any"],
+    author="Tijme Gommers",
+    author_email="acstis@finnwea.com",
+    license="MIT",
+    url="https://github.com/tijme/angularjs-csti-scanner",
+    install_requires=requirements
 )

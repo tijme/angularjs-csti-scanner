@@ -22,94 +22,274 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from nyawc.Options import Options
-from nyawc.Queue import QueueItem
+import sys
+import signal
+import colorlog
+import traceback
+
+from requests_toolbelt import user_agent
+from nyawc.QueueItem import QueueItem
 from nyawc.Crawler import Crawler
 from nyawc.CrawlerActions import CrawlerActions
 from nyawc.http.Request import Request
-from acstis.Logging import Logging
-from acstis.Exploit import Exploit
-from acstis.Scraper import Scraper
-
-import requests
-import sys
+from nyawc.http.Response import Response
+from acstis.helpers.BrowserHelper import BrowserHelper
+from acstis.helpers.PackageHelper import PackageHelper
+from acstis.Scanner import Scanner
 
 class Driver:
+    """The main Crawler class which handles the crawling recursion, queue and processes.
 
-    input_uri = None
+    Attributes:
+        __args (:class:`argparse.Namespace`): A namespace with all the parsed CLI arguments.
+        __options (:class:`nyawc.Options`): The options to use for the current crawling runtime.
+        __vulnerable_items list(:class:`nyawc.http.Request`): A list of vulnerable items (if any).
+        stopping (bool): True on SIGINT, false otherwise.
 
-    input_help = False
+    """
 
-    input_verify_exploit = False
+    def __init__(self, args, options):
+        """Constructs a Driver instance. The driver instance manages the crawling proces.
 
-    input_use_crawler = False
+        Args:
+            args (:class:`argparse.Namespace`): A namespace with all the parsed CLI arguments.
+            options (:class:`nyawc.Options`): The options to use for the current crawling runtime.
 
-    input_quit_if_vulnerable = False
+        """
 
-    crawler_options = Options()
+        self.stopping = False
 
-    website_details = None
+        self.__args = args
+        self.__options = options
+        self.__vulnerable_items = []
 
-    vulnerable_requests = []
+        self.__options.callbacks.crawler_before_start = self.cb_crawler_before_start
+        self.__options.callbacks.crawler_after_finish = self.cb_crawler_after_finish
+        self.__options.callbacks.request_before_start = self.cb_request_before_start
+        self.__options.callbacks.request_after_finish = self.cb_request_after_finish
+        self.__options.callbacks.request_in_thread_after_finish = self.cb_request_in_thread_after_finish
+        self.__options.callbacks.request_on_error = self.cb_request_on_error
 
-    def __init__(self, uri, verify_exploit, use_crawler, quit_if_vulnerable):
-        Logging.info("Started scan")
+        self.__options.identity.headers.update({
+            "User-Agent": user_agent(PackageHelper.get_alias(), PackageHelper.get_version())
+        })
 
-        self.input_uri = uri
-        self.input_verify_exploit = verify_exploit
-        self.input_use_crawler = use_crawler
-        self.input_quit_if_vulnerable = quit_if_vulnerable
+    def __signal_handler(self, signum, frame):
+        """On sigint (e.g. CTRL+C) stop the crawler.
 
-        self.crawler_options.callbacks.crawler_before_start = self.cb_crawler_before_start
-        self.crawler_options.callbacks.crawler_after_finish = self.cb_crawler_after_finish
-        self.crawler_options.callbacks.request_before_start = self.cb_request_before_start
-        self.crawler_options.callbacks.request_after_finish = self.cb_request_after_finish
+        Args:
+            signum (int): The signal number.
+            frame (obj): The current stack frame.
 
-        self.crawler_options.scope.protocol_must_match = False
-        self.crawler_options.scope.subdomain_must_match = True
-        self.crawler_options.scope.hostname_must_match = True
-        self.crawler_options.scope.tld_must_match = True
-        self.crawler_options.scope.max_depth = 0 if not self.input_use_crawler else None
+        """
 
-        self.crawler_options.performance.max_threads = 12
+        if self.stopping:
+            return
 
-        try:
-            self.website_details = Scraper.get_details(self.input_uri)
-        except Exception as e:
-            Logging.red("Error while scraping URL '{}': {}".format(self.input_uri, str(e)))
-            sys.exit(1)
+        self.stopping = True
 
-        if not self.website_details["uses_angular"]:
-            Logging.red("This website does not use AngularJS.")
-            sys.exit(1)
+        colorlog.getLogger().warning("Received SIGINT, stopping the crawling threads safely. This could take up to 30 seconds (the thread timeout).")
 
-        Logging.info("Found AngularJS version " + self.website_details["angular_version"])
+    def __set_angular_version(self):
+        """Find and set the AngularJS version as class attribute
 
-        crawler = Crawler(self.crawler_options)
-        crawler.start_with(Request(self.input_uri))
+        Returns:
+            str: True if found and set, False otherwise.
 
-        if len(self.vulnerable_requests) == 0:
-            sys.exit(1)
+        """
+
+        if self.__args.angular_version:
+            self.__angular_version = self.__args.angular_version
+            colorlog.getLogger().info("Found AngularJS version " + self.__angular_version + " in the arguments.")
+            return True
+
+        colorlog.getLogger().info("Looking for AngularJS version using a headless browser.")
+        colorlog.getLogger().info("Waiting until DOM is completely loaded.")
+
+        self.__angular_version = BrowserHelper.javascript(
+            QueueItem(Request(self.__args.domain), Response(self.__args.domain)),
+            "return angular.version.full"
+        )
+
+        if self.__angular_version:
+            colorlog.getLogger().info("Found AngularJS version " + self.__angular_version + ".")
+            return True
+
+        colorlog.getLogger().error("Couldn't determine the AngularJS version (`angular.version.full` threw an exception).")
+        colorlog.getLogger().error("If you are certain this URL uses AngularJS, specify the version via the `--angular-version` argument.")
+        return False
+
+    def start(self):
+        """Start the crawler."""
+
+        if self.__set_angular_version():
+            crawler = Crawler(self.__options)
+            signal.signal(signal.SIGINT, self.__signal_handler)
+
+            startpoint = Request(self.__args.domain)
+            crawler.start_with(startpoint)
+
+        # Exit the process with the correct status code
+        sys.exit(not self.__vulnerable_items)
 
     def cb_crawler_before_start(self):
-        Logging.info("Started crawler")
+        """Called before the crawler starts crawling."""
+
+        colorlog.getLogger().info("Angular CSTI scanner started.")
 
     def cb_crawler_after_finish(self, queue):
-        Logging.info("Found {} vulnerable URI(s)".format(len(self.vulnerable_requests)))
+        """Crawler callback (called after the crawler finished).
+
+        Args:
+            queue (obj): The current crawling queue.
+
+        """
+
+        if queue.get_all(QueueItem.STATUS_CANCELLED):
+            colorlog.getLogger().warning("Angular CSTI scanner finished (but some requests were cancelled).")
+        else:
+            colorlog.getLogger().info("Angular CSTI scanner finished.")
+
+        if self.__vulnerable_items:
+            colorlog.getLogger().success("Found " + str(len(self.__vulnerable_items)) + " vulnerable request(s).")
+            colorlog.getLogger().success("Listing vulnerable request(s).")
+
+            for vulnerable_item in self.__vulnerable_items:
+                colorlog.getLogger().success(self.__request_to_string(vulnerable_item.request))
+
+                if vulnerable_item.payload["message"]:
+                    colorlog.getLogger().warning(vulnerable_item.payload["message"])
+        else:
+            colorlog.getLogger().warning("Couldn't find any vulnerable requests.")
 
     def cb_request_before_start(self, queue, queue_item):
-        Logging.info("Checking {}".format(queue_item.request.url))
+        """Crawler callback (called before a request starts).
 
-        result = Exploit.is_vulnerable(queue_item, self.website_details["angular_version"], self.input_verify_exploit)
+        Args:
+            queue (:class:`nyawc.Queue`): The current crawling queue.
+            queue_item (:class:`nyawc.QueueItem`): The queue item that's about to start.
 
-        if result is not False:
-            self.vulnerable_requests.append(result)
-            Logging.red("Request is vulnerable [" + result.request.method + "] " + result.request.url + " (PostData: " + str(result.request.data) + ")")
+        Returns:
+            str: A crawler action (either DO_SKIP_TO_NEXT, DO_STOP_CRAWLING or DO_CONTINUE_CRAWLING).
 
-            if self.input_quit_if_vulnerable:
-                return CrawlerActions.DO_STOP_CRAWLING
+        """
+
+        colorlog.getLogger().info("Scanning " + queue_item.request.url)
+
+        if self.__vulnerable_items and self.__args.stop_if_vulnerable:
+            self.stopping = True
+            return CrawlerActions.DO_STOP_CRAWLING
+
+        if self.stopping:
+            return CrawlerActions.DO_STOP_CRAWLING
 
         return CrawlerActions.DO_CONTINUE_CRAWLING
 
     def cb_request_after_finish(self, queue, queue_item, new_queue_items):
+        """Crawler callback (called after a request finished).
+
+        Args:
+            queue (:class:`nyawc.Queue`): The current crawling queue.
+            queue_item (:class:`nyawc.QueueItem`): The queue item that was finished.
+            new_queue_items list(:class:`nyawc.QueueItem`): The new queue items that were found in the one that finished.
+
+        Returns:
+            str: A crawler action (either DO_STOP_CRAWLING or DO_CONTINUE_CRAWLING).
+
+        """
+
+        self.__vulnerable_items.extend(queue_item.vulnerable_items)
+
+        for vulnerable_item in queue_item.vulnerable_items:
+            colorlog.getLogger().success(self.__request_to_string(vulnerable_item.request))
+
+            if vulnerable_item.payload["message"]:
+                colorlog.getLogger().warning(vulnerable_item.payload["message"])
+
+        if self.__vulnerable_items and self.__args.stop_if_vulnerable:
+            self.stopping = True
+            return CrawlerActions.DO_STOP_CRAWLING
+
+        if self.stopping:
+            return CrawlerActions.DO_STOP_CRAWLING
+
         return CrawlerActions.DO_CONTINUE_CRAWLING
+
+    def cb_request_on_error(self, queue_item, message):
+        """Crawler callback (called when a request error occurs).
+
+        Args:
+            queue_item (:class:`nyawc.QueueItem`): The queue item that failed.
+            message (str): The error message.
+
+        """
+
+        colorlog.getLogger().error(message)
+
+    def cb_request_in_thread_after_finish(self, queue_item):
+        """Crawler callback (called after a request finished).
+
+        Args:
+            queue_item (:class:`nyawc.QueueItem`): The queue item that's about to start.
+
+        Note:
+            This method gets called in the crawling thread and is therefore not thread safe.
+
+        """
+
+        queue_item.vulnerable_items = []
+
+        if self.stopping or not hasattr(queue_item.response, "text"):
+            return
+
+        try:
+            queue_item.vulnerable_items = Scanner(self, self.__angular_version, self.__args.verify_payload, queue_item).get_vulnerable_items()
+        except Exception as e:
+            print(e)
+            print(traceback.format_exc())
+
+    def __request_to_string(self, request):
+        """Convert the given requests to a string representation.
+
+        Args:
+            request (:class:`nyawc.http.Request`): The request to convert.
+
+        Returns:
+            str: The string representation
+
+        """
+
+        data = ""
+
+        if request.data:
+            key_values = []
+            for (key, value) in request.data.items():
+                key_values.append(key + "=" + value)
+
+            data += "&".join(key_values)
+
+        return request.method.upper() + "(" + data + "): " + request.url
+
+class Namespace:
+    """An ArgumentParser namespace mockup for if the driver is called manually (using code instead of CLI)."""
+
+    def __init__(self, **kwargs):
+        """Initialize the namespace with the given arguments."""
+
+        self.__dict__.update(kwargs)
+
+    def __getattr__(self, name):
+        """Return values that exists, otherwise return None.
+
+        Args:
+            name (str): The name of the key to look for.
+
+        Returns:
+            str: The value in the dict or None.
+
+        """
+
+        if name in self.__dict__:
+            return object.__getattribute__(self, name)
+        else:
+            return None
