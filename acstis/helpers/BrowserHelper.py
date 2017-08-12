@@ -182,11 +182,9 @@ class BrowserHelper:
             return BrowserHelper.__phantomjs_driver
 
         path = os.path.dirname(os.path.abspath(__file__))
-        bits = ctypes.sizeof(ctypes.c_voidp)
-        x = "32" if bits == 4 else "64"
 
         if sys.platform == "linux" or sys.platform == "linux2":
-            file = path + "/../phantomjs/linux" + x + "-2.1.1"
+            file = path + "/../phantomjs/linux-2.1.1"
         elif sys.platform == "darwin":
             file =  path + "/../phantomjs/mac-2.1.1"
         elif sys.platform == "win32":
