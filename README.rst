@@ -170,4 +170,3 @@ License
 -------
 
 ACSTIS is open-sourced software licensed under the `MIT license <https://github.com/tijme/angularjs-csti-scanner/blob/master/LICENSE.rst>`__.
-nde
