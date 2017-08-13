@@ -15,14 +15,6 @@
    :target: https://travis-ci.org/tijme/angularjs-csti-scanner
    :alt: Build Status
 
-.. image:: https://img.shields.io/pypi/v/acstis.svg
-   :target: https://pypi.python.org/pypi/acstis/
-   :alt: PyPi version
-
-.. image:: https://img.shields.io/pypi/pyversions/acstis.svg
-   :target: https://www.python.org/
-   :alt: Python version
-
 .. image:: https://img.shields.io/pypi/l/acstis.svg
    :target: https://github.com/tijme/acstis/blob/master/LICENSE.rst
    :alt: License: MIT
