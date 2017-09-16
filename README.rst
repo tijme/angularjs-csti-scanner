@@ -100,7 +100,7 @@ Usage
 
 These options are not implemented in the command line interface of ACSTIS. Please download the `extended.py <https://github.com/tijme/angularjs-csti-scanner/blob/master/extended.py>`_ script and extend it with one or more of the following code snippets. You can paste these code snippets in the `main()` method of the `extended.py` script.
 
-**If you use the `extended.py` file make sure you call ``python extended.py [your arguments]`` instead of ``acstis [your arguments]``.**
+**Please note:** if you use the ``extended.py`` file make sure you call ``python extended.py [your arguments]`` instead of ``acstis [your arguments]``.
 
 *Basic Authentication*
 
