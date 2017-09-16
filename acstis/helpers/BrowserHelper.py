@@ -149,23 +149,35 @@ class BrowserHelper:
         Returns:
             list: The service args containing proxy details
 
+        Note:
+            The `ignore-ssl-errors` argument is also added because
+            all SSL checks are handled by Python's requests module.
+            Python's requests module is also able to allow certain
+            custom certificates (e.g. if a proxy is used).
+
         """
 
         service_args = []
 
         parsed = urlparse(list(proxies.values())[0])
 
+        # Proxy type
         if parsed.scheme.startswith("http"):
             service_args.append("--proxy-type=http")
         else:
             service_args.append("--proxy-type=" + parsed.scheme)
 
+        # Proxy
         host_and_port = parsed.netloc.split("@")[-1]
         service_args.append("--proxy=" + host_and_port)
 
+        # Proxy auth
         if len(parsed.netloc.split("@")) == 2:
             user_pass = parsed.netloc.split("@")[0]
             service_args.append("--proxy-auth=" + user_pass)
+
+        # Ignore SSL (please see note in this method).
+        service_args.append("--ignore-ssl-errors=true")
 
         return service_args
 
