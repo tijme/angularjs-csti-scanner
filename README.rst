@@ -60,6 +60,10 @@ Usage
 
 ``acstis -c -siv -d "https://finnwea.com/"``
 
+**Trust the given certificate**
+
+``acstis -d "https://finnwea.com/some/page/?category=23" -tc "/Users/name/Desktop/cert.pem"``
+
 **All command line options**
 
 .. code:: text
@@ -67,24 +71,28 @@ Usage
    usage: acstis [-h] -d DOMAIN [-c] [-vp] [-av ANGULAR_VERSION] [-pmm] [-sos] [-soh] [-sot] [-siv] [-md MAX_DEPTH] [-mt MAX_THREADS]
 
    required arguments:
-       -d DOMAIN, --domain DOMAIN                              the domain to scan (e.g. finnwea.com)
+       -d DOMAIN, --domain DOMAIN                                             the domain to scan (e.g. finnwea.com)
 
    optional arguments:
-       -h, --help                                              show this help message and exit
-       -c, --crawl                                             use the crawler to scan all the entire domain
-       -vp, --verify-payload                                   use a javascript engine to verify if the payload was executed (otherwise false positives may occur)
-       -av ANGULAR_VERSION, --angular-version ANGULAR_VERSION  manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work
-       -pmm, --protocol-must-match                             (crawler option) only scan pages with the same protocol as the startpoint (e.g. only https)
-       -sos, --scan-other-subdomains                           (crawler option) also scan pages that have another subdomain than the startpoint
-       -soh, --scan-other-hostnames                            (crawler option) also scan pages that have another hostname than the startpoint
-       -sot, --scan-other-tlds                                 (crawler option) also scan pages that have another tld than the startpoint
-       -siv, --stop-if-vulnerable                              (crawler option) stop scanning if a vulnerability was found
-       -md MAX_DEPTH, --max-depth MAX_DEPTH                    (crawler option) the maximum search depth (default is unlimited)
-       -mt MAX_THREADS, --max-threads MAX_THREADS              (crawler option) the maximum amount of simultaneous threads to use (default is 8)
+       -h, --help                                                             show this help message and exit
+       -c, --crawl                                                            use the crawler to scan all the entire domain
+       -vp, --verify-payload                                                  use a javascript engine to verify if the payload was executed (otherwise false positives may occur)
+       -av ANGULAR_VERSION, --angular-version ANGULAR_VERSION                 manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work
+       -pmm, --protocol-must-match                                            (crawler option) only scan pages with the same protocol as the startpoint (e.g. only https)
+       -sos, --scan-other-subdomains                                          (crawler option) also scan pages that have another subdomain than the startpoint
+       -soh, --scan-other-hostnames                                           (crawler option) also scan pages that have another hostname than the startpoint
+       -sot, --scan-other-tlds                                                (crawler option) also scan pages that have another tld than the startpoint
+       -siv, --stop-if-vulnerable                                             (crawler option) stop scanning if a vulnerability was found
+       -md MAX_DEPTH, --max-depth MAX_DEPTH                                   (crawler option) the maximum search depth (default is unlimited)
+       -mt MAX_THREADS, --max-threads MAX_THREADS                             (crawler option) the maximum amount of simultaneous threads to use (default is 8)
+       -iic, --ignore-invalid-certificates                                    (crawler option) ignore invalid ssl certificates
+       -tc TRUSTED_CERTIFICATES, --trusted-certificates TRUSTED_CERTIFICATES  (crawler option) trust this CA_BUNDLE file (.pem) or directory with certificates
 
 **Authentication, Cookies, Headers, Proxies & Scope options**
 
 These options are not implemented in the command line interface of ACSTIS. Please download the `extended.py <https://github.com/tijme/angularjs-csti-scanner/blob/master/extended.py>`_ script and extend it with one or more of the following code snippets. You can paste these code snippets in the `main()` method of the `extended.py` script.
+
+**Please note:** if you use the ``extended.py`` file make sure you call ``python extended.py [your arguments]`` instead of ``acstis [your arguments]``.
 
 *Basic Authentication*
 

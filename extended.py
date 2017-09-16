@@ -46,6 +46,8 @@ def main():
     options.scope.tld_must_match = not args.scan_other_tlds
     options.scope.max_depth = args.max_depth if args.crawl else 0
     options.performance.max_threads = args.max_threads
+    options.misc.verify_ssl_certificates = not args.ignore_invalid_certificates
+    options.misc.trusted_certificates = args.trusted_certificates
 
     """ ########################################################## """
     """                                                            """
@@ -69,7 +71,7 @@ def require_arguments():
 
     parser = argparse.ArgumentParser(
         prog=PackageHelper.get_alias(),
-        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=160, width=160)
+        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=180, width=180)
     )
 
     optional = parser._action_groups.pop()
@@ -79,7 +81,7 @@ def require_arguments():
 
     optional.add_argument("-c", "--crawl", help="use the crawler to scan all the entire domain", action="store_true")
     optional.add_argument("-vp", "--verify-payload", help="use a javascript engine to verify if the payload was executed (otherwise false positives may occur)", action="store_true")
-    optional.add_argument("-av", "--angular-version", help="manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work", type=str)
+    optional.add_argument("-av", "--angular-version", help="manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work", type=str, default=None)
     optional.add_argument("-siv", "--stop-if-vulnerable", help="(crawler option) stop scanning if a vulnerability was found", action="store_true")
     optional.add_argument("-pmm", "--protocol-must-match", help="(crawler option) only scan pages with the same protocol as the startpoint (e.g. only https)", action="store_true")
     optional.add_argument("-sos", "--scan-other-subdomains", help="(crawler option) also scan pages that have another subdomain than the startpoint", action="store_true")
@@ -87,6 +89,8 @@ def require_arguments():
     optional.add_argument("-sot", "--scan-other-tlds", help="(crawler option) also scan pages that have another tld than the startpoint", action="store_true")
     optional.add_argument("-md", "--max-depth", help="(crawler option) the maximum search depth (default is unlimited)", type=int)
     optional.add_argument("-mt", "--max-threads", help="(crawler option) the maximum amount of simultaneous threads to use (default is 8)", type=int, default=8)
+    optional.add_argument("-iic", "--ignore-invalid-certificates", help="(crawler option) ignore invalid ssl certificates", action="store_true")
+    optional.add_argument("-tc", "--trusted-certificates", help="(crawler option) trust this CA_BUNDLE file (.pem) or directory with certificates", type=str, default=None)
 
     parser._action_groups.append(optional)
     return parser.parse_args()
