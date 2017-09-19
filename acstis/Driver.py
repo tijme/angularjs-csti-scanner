@@ -33,6 +33,7 @@ from nyawc.Crawler import Crawler
 from nyawc.CrawlerActions import CrawlerActions
 from nyawc.http.Request import Request
 from nyawc.http.Response import Response
+from nyawc.helpers.HTTPRequestHelper import HTTPRequestHelper
 from acstis.helpers.BrowserHelper import BrowserHelper
 from acstis.helpers.PackageHelper import PackageHelper
 from acstis.Scanner import Scanner
@@ -90,8 +91,11 @@ class Driver:
 
         colorlog.getLogger().warning("Received SIGINT, stopping the crawling threads safely. This could take up to 30 seconds (the thread timeout).")
 
-    def __set_angular_version(self):
+    def __set_angular_version(self, startpoint):
         """Find and set the AngularJS version as class attribute
+
+        Args:
+            startpoint (:class:`nyawc.http.Request`): The startpoint request.
 
         Returns:
             str: True if found and set, False otherwise.
@@ -107,7 +111,7 @@ class Driver:
         colorlog.getLogger().info("Waiting until DOM is completely loaded.")
 
         self.__angular_version = BrowserHelper.javascript(
-            QueueItem(Request(self.__args.domain), Response(self.__args.domain)),
+            QueueItem(startpoint, Response(self.__args.domain)),
             "return angular.version.full"
         )
 
@@ -122,11 +126,13 @@ class Driver:
     def start(self):
         """Start the crawler."""
 
-        if self.__set_angular_version():
+        startpoint = Request(self.__args.domain)
+        HTTPRequestHelper.patch_with_options(startpoint, self.__options)
+
+        if self.__set_angular_version(startpoint):
             crawler = Crawler(self.__options)
             signal.signal(signal.SIGINT, self.__signal_handler)
 
-            startpoint = Request(self.__args.domain)
             crawler.start_with(startpoint)
 
         # Exit the process with the correct status code
