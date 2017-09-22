@@ -32,6 +32,7 @@ import requests.cookies
 
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from nyawc.helpers.HTTPRequestHelper import HTTPRequestHelper
 from nyawc.helpers.URLHelper import URLHelper
 from nyawc.http.Request import Request
 
@@ -116,25 +117,30 @@ class BrowserHelper:
 
         if queue_item:
 
-            # Authentication
+            # Add authentication header to request
             if queue_item.request.auth:
                 queue_item.request.auth(queue_item.request)
 
-            # Headers
+            # Add cookie header to request
+            if queue_item.request.cookies:
+                cookie_string = HTTPRequestHelper.get_cookie_header(queue_item)
+                queue_item.request.headers["Cookie"] = cookie_string
+
+            # Add headers to PhantomJS
             if queue_item.request.headers:
                 for (key, value) in queue_item.request.headers.items():
                     if key.lower() == "user-agent":
                         capabilities["phantomjs.page.settings.userAgent"] = value
                     else:
-                        capabilities["phantomjs.page.settings." + key] = value
+                        capabilities["phantomjs.page.customHeaders." + key] = value
 
             # Proxies
             if queue_item.request.proxies:
                 service.extend(BrowserHelper.__proxies_to_service_args(queue_item.request.proxies))
 
-        driver = BrowserHelper.__get_phantomjs_driver()
+        driver_path = BrowserHelper.__get_phantomjs_driver()
         return webdriver.PhantomJS(
-            executable_path=driver,
+            executable_path=driver_path,
             desired_capabilities=capabilities,
             service_args=service
         )
