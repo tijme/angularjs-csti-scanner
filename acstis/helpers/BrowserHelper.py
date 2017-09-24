@@ -132,8 +132,6 @@ class BrowserHelper:
                     if key.lower() == "user-agent":
                         capabilities["phantomjs.page.settings.userAgent"] = value
                     else:
-                        print(key + " === " + value)
-                        capabilities["phantomjs.page.settings." + key] = value
                         capabilities["phantomjs.page.customHeaders." + key] = value
 
             # Proxies
