@@ -1,5 +1,5 @@
 FROM python:stretch
-MAINTAINER random_robbie <txt3rob@gmail.com>
+LABEL maintainer="txt3rob@gmail.com"
 
 # update
 RUN apt-get update && apt-get install locales git wget nano -y
