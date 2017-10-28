@@ -28,6 +28,7 @@ import json
 import stat
 import ctypes
 import colorlog
+import requests
 import requests.cookies
 
 from selenium import webdriver
@@ -128,10 +129,17 @@ class BrowserHelper:
 
             # Add headers to PhantomJS
             if queue_item.request.headers:
+                default_headers = requests.utils.default_headers()
                 for (key, value) in queue_item.request.headers.items():
                     if key.lower() == "user-agent":
                         capabilities["phantomjs.page.settings.userAgent"] = value
                     else:
+                        
+                        # PhantomJS has issues with executing JavaScript on pages with GZIP encoding.
+                        # See link for more information (https://github.com/detro/ghostdriver/issues/489).
+                        if key == "Accept-Encoding" and "gzip" in value:
+                            continue
+
                         capabilities["phantomjs.page.customHeaders." + key] = value
 
             # Proxies
