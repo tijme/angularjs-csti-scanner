@@ -1,6 +1,7 @@
 # Custom
 acstis/.semver
 ghostdriver.log
+extended_test.py
 
 # OS
 Thumbs.db
