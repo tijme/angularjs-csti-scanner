@@ -68,25 +68,26 @@ Usage
 
 .. code:: text
 
-   usage: acstis [-h] -d DOMAIN [-c] [-vp] [-av ANGULAR_VERSION] [-pmm] [-sos] [-soh] [-sot] [-siv] [-md MAX_DEPTH] [-mt MAX_THREADS]
+   usage: acstis [-h] -d DOMAIN [-c] [-vp] [-av ANGULAR_VERSION] [-vrl VULNERABLE_REQUESTS_LOG] [-siv] [-pmm] [-sos] [-soh] [-sot] [-md MAX_DEPTH] [-mt MAX_THREADS] [-iic] [-tc TRUSTED_CERTIFICATES]
 
    required arguments:
-       -d DOMAIN, --domain DOMAIN                                             the domain to scan (e.g. finnwea.com)
+      -d DOMAIN, --domain DOMAIN                                                       the domain to scan (e.g. finnwea.com)
 
    optional arguments:
-       -h, --help                                                             show this help message and exit
-       -c, --crawl                                                            use the crawler to scan all the entire domain
-       -vp, --verify-payload                                                  use a javascript engine to verify if the payload was executed (otherwise false positives may occur)
-       -av ANGULAR_VERSION, --angular-version ANGULAR_VERSION                 manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work
-       -pmm, --protocol-must-match                                            (crawler option) only scan pages with the same protocol as the startpoint (e.g. only https)
-       -sos, --scan-other-subdomains                                          (crawler option) also scan pages that have another subdomain than the startpoint
-       -soh, --scan-other-hostnames                                           (crawler option) also scan pages that have another hostname than the startpoint
-       -sot, --scan-other-tlds                                                (crawler option) also scan pages that have another tld than the startpoint
-       -siv, --stop-if-vulnerable                                             (crawler option) stop scanning if a vulnerability was found
-       -md MAX_DEPTH, --max-depth MAX_DEPTH                                   (crawler option) the maximum search depth (default is unlimited)
-       -mt MAX_THREADS, --max-threads MAX_THREADS                             (crawler option) the maximum amount of simultaneous threads to use (default is 8)
-       -iic, --ignore-invalid-certificates                                    (crawler option) ignore invalid ssl certificates
-       -tc TRUSTED_CERTIFICATES, --trusted-certificates TRUSTED_CERTIFICATES  (crawler option) trust this CA_BUNDLE file (.pem) or directory with certificates
+      -h, --help                                                                       show this help message and exit
+      -c, --crawl                                                                      use the crawler to scan all the entire domain
+      -vp, --verify-payload                                                            use a javascript engine to verify if the payload was executed (otherwise false positives may occur)
+      -av ANGULAR_VERSION, --angular-version ANGULAR_VERSION                           manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work
+      -vrl VULNERABLE_REQUESTS_LOG, --vulnerable-requests-log VULNERABLE_REQUESTS_LOG  log all vulnerable requests to this file (e.g. /var/logs/acstis.log or urls.log)
+      -siv, --stop-if-vulnerable                                                       (crawler option) stop scanning if a vulnerability was found
+      -pmm, --protocol-must-match                                                      (crawler option) only scan pages with the same protocol as the startpoint (e.g. only https)
+      -sos, --scan-other-subdomains                                                    (crawler option) also scan pages that have another subdomain than the startpoint
+      -soh, --scan-other-hostnames                                                     (crawler option) also scan pages that have another hostname than the startpoint
+      -sot, --scan-other-tlds                                                          (crawler option) also scan pages that have another tld than the startpoint
+      -md MAX_DEPTH, --max-depth MAX_DEPTH                                             (crawler option) the maximum search depth (default is unlimited)
+      -mt MAX_THREADS, --max-threads MAX_THREADS                                       (crawler option) the maximum amount of simultaneous threads to use (default is 8)
+      -iic, --ignore-invalid-certificates                                              (crawler option) ignore invalid ssl certificates
+      -tc TRUSTED_CERTIFICATES, --trusted-certificates TRUSTED_CERTIFICATES            (crawler option) trust this CA_BUNDLE file (.pem) or directory with certificates
 
 **Authentication, Cookies, Headers, Proxies & Scope options**
 
