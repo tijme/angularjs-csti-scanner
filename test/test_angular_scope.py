@@ -49,7 +49,7 @@ class TestAngularScope(unittest.TestCase):
 
             exitcode = process.wait()
         except Exception as e:
-            print(e)
+            print("Exception: " + str(e))
             exitcode = 1
 
         server.stop()
@@ -71,7 +71,7 @@ class TestAngularScope(unittest.TestCase):
 
             exitcode = process.wait()
         except Exception as e:
-            print(e)
+            print("Exception: " + str(e))
             exitcode = 1
 
         server.stop()
@@ -93,7 +93,7 @@ class TestAngularScope(unittest.TestCase):
 
             exitcode = process.wait()
         except Exception as e:
-            print(e)
+            print("Exception: " + str(e))
             exitcode = 1
 
         server.stop()
@@ -115,7 +115,7 @@ class TestAngularScope(unittest.TestCase):
 
             exitcode = process.wait()
         except Exception as e:
-            print(e)
+            print("Exception: " + str(e))
             exitcode = 1
 
         server.stop()
