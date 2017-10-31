@@ -41,6 +41,10 @@ First make sure you're on `Python 2.7/3.4 <https://www.python.org/>`__ or higher
 
 ``$ pip install git+https://github.com/tijme/angularjs-csti-scanner.git``
 
+Or install the `.zip` if you don't have GIT installed.
+
+``$ pip install https://github.com/tijme/angularjs-csti-scanner/archive/master.zip``
+
 Usage
 -----
 
