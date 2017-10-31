@@ -83,5 +83,8 @@ class FileLoggingHelper:
 
         """
 
+        if not FileLoggingHelper.__filename:
+            return
+
         with open(FileLoggingHelper.__filename, "a") as log:
             log.write(message + "\n")
