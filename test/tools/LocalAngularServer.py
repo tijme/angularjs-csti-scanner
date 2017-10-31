@@ -63,20 +63,20 @@ class LocalAngularServer:
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.settimeout(4)
+        self.sock.settimeout(1)
         self.sock.bind(("127.0.0.1", 0))
         self.sock.listen(1)
+
+        self.url = "127.0.0.1:" + str(self.sock.getsockname()[1])
 
         self.thread = threading.Thread(target=getattr(self, handler))
         self.thread.start()
 
-        self.url = "127.0.0.1:" + str(self.sock.getsockname()[1])
-
     def handler_vulnerable_test(self):
         """Serve a vulnerable AngularJS application for every HTTP request."""
 
-        try:
-            while self.running:
+        while self.running:
+            try:
                 csock, caddr = self.sock.accept()
                 request = csock.recv(1024)
 
@@ -98,14 +98,14 @@ class LocalAngularServer:
 
                 csock.sendall(b"""HTTP/1.0 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n""" + bytes(html.encode("UTF-8")))
                 csock.close()
-        except Exception as e:
-            self.running = False
+            except Exception as e:
+                pass
 
     def handler_scope_test(self):
         """Serve a vulnerable AngularJS application for every HTTP request."""
 
-        try:
-            while self.running:
+        while self.running:
+            try:
                 csock, caddr = self.sock.accept()
                 request = csock.recv(1024)
 
@@ -137,8 +137,8 @@ class LocalAngularServer:
 
                 csock.sendall(b"""HTTP/1.0 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n""" + bytes(html.encode("UTF-8")))
                 csock.close()
-        except Exception as e:
-            self.running = False
+            except Exception as e:
+                pass
 
     def stop(self):
         """Stop the websocket."""

@@ -36,6 +36,7 @@ from nyawc.http.Response import Response
 from nyawc.helpers.HTTPRequestHelper import HTTPRequestHelper
 from acstis.helpers.BrowserHelper import BrowserHelper
 from acstis.helpers.PackageHelper import PackageHelper
+from acstis.helpers.FileLoggingHelper import FileLoggingHelper
 from acstis.Scanner import Scanner
 
 class Driver:
@@ -74,6 +75,8 @@ class Driver:
         self.__options.identity.headers.update({
             "User-Agent": user_agent(PackageHelper.get_alias(), PackageHelper.get_version())
         })
+
+        FileLoggingHelper.set_file(self.__args.vulnerable_requests_log)
 
     def __signal_handler(self, signum, frame):
         """On sigint (e.g. CTRL+C) stop the crawler.
@@ -208,6 +211,7 @@ class Driver:
 
         for vulnerable_item in queue_item.vulnerable_items:
             colorlog.getLogger().success(self.__request_to_string(vulnerable_item.request))
+            FileLoggingHelper.log(self.__request_to_string(vulnerable_item.request))
 
             if vulnerable_item.payload["message"]:
                 colorlog.getLogger().warning(vulnerable_item.payload["message"])

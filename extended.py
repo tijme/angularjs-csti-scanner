@@ -82,6 +82,7 @@ def require_arguments():
     optional.add_argument("-c", "--crawl", help="use the crawler to scan all the entire domain", action="store_true")
     optional.add_argument("-vp", "--verify-payload", help="use a javascript engine to verify if the payload was executed (otherwise false positives may occur)", action="store_true")
     optional.add_argument("-av", "--angular-version", help="manually pass the angular version (e.g. 1.4.2) if the automatic check doesn't work", type=str, default=None)
+    optional.add_argument("-vrl", "--vulnerable-requests-log", help="log all vulnerable requests to this file (e.g. /var/logs/acstis.log or urls.log)", type=str, default=None)
     optional.add_argument("-siv", "--stop-if-vulnerable", help="(crawler option) stop scanning if a vulnerability was found", action="store_true")
     optional.add_argument("-pmm", "--protocol-must-match", help="(crawler option) only scan pages with the same protocol as the startpoint (e.g. only https)", action="store_true")
     optional.add_argument("-sos", "--scan-other-subdomains", help="(crawler option) also scan pages that have another subdomain than the startpoint", action="store_true")
