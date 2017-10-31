@@ -15,8 +15,8 @@
    :target: https://travis-ci.org/tijme/angularjs-csti-scanner
    :alt: Build Status
 
-.. image:: https://img.shields.io/pypi/l/acstis.svg
-   :target: https://github.com/tijme/acstis/blob/master/LICENSE.rst
+.. image:: https://img.shields.io/github/license/tijme/angularjs-csti-scanner.svg
+   :target: https://github.com/tijme/angularjs-csti-scanner/blob/master/LICENSE.rst
    :alt: License: MIT
 
 .. raw:: html
