@@ -117,6 +117,9 @@ class Scanner:
         except Exception:
             return False
 
+        if not "html" in queue_item.response.headers.get("content-type"):
+            return False
+
         if not queue_item.get_soup_response():
             return False
 
