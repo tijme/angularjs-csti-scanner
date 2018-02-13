@@ -11,7 +11,7 @@
 
    <br class="title">
 
-.. image:: https://img.shields.io/badge/donate-paypal-brightgreen.svg
+.. image:: https://img.shields.io/badge/donate%20via-paypal-brightgreen.svg
    :target: https://www.paypal.me/tijmegommers/25
    :alt: Donate via PayPal
    
