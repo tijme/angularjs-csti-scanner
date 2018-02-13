@@ -15,6 +15,10 @@
    :target: https://travis-ci.org/tijme/angularjs-csti-scanner
    :alt: Build Status
 
+.. image:: https://img.shields.io/badge/Donate-PayPal-brightgreen.svg
+   :target: https://www.paypal.me/tijmegommers/25
+   :alt: Donate via PayPal
+
 .. image:: https://img.shields.io/github/license/tijme/angularjs-csti-scanner.svg
    :target: https://github.com/tijme/angularjs-csti-scanner/blob/master/LICENSE.rst
    :alt: License: MIT
