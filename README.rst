@@ -11,13 +11,13 @@
 
    <br class="title">
 
-.. image:: https://travis-ci.org/tijme/angularjs-csti-scanner.svg?branch=master
-   :target: https://travis-ci.org/tijme/angularjs-csti-scanner
-   :alt: Build Status
-
 .. image:: https://img.shields.io/badge/donate-paypal-brightgreen.svg
    :target: https://www.paypal.me/tijmegommers/25
    :alt: Donate via PayPal
+   
+.. image:: https://travis-ci.org/tijme/angularjs-csti-scanner.svg?branch=master
+   :target: https://travis-ci.org/tijme/angularjs-csti-scanner
+   :alt: Build Status
    
 .. image:: https://img.shields.io/badge/license-mit-brightgreen.svg
    :target: https://github.com/tijme/angularjs-csti-scanner/blob/master/LICENSE.rst
