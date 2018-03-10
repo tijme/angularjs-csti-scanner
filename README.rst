@@ -89,7 +89,7 @@ Usage
       -soh, --scan-other-hostnames                                                     (crawler option) also scan pages that have another hostname than the startpoint
       -sot, --scan-other-tlds                                                          (crawler option) also scan pages that have another tld than the startpoint
       -md MAX_DEPTH, --max-depth MAX_DEPTH                                             (crawler option) the maximum search depth (default is unlimited)
-      -mt MAX_THREADS, --max-threads MAX_THREADS                                       (crawler option) the maximum amount of simultaneous threads to use (default is 8)
+      -mt MAX_THREADS, --max-threads MAX_THREADS                                       (crawler option) the maximum amount of simultaneous threads to use (default is 20)
       -iic, --ignore-invalid-certificates                                              (crawler option) ignore invalid ssl certificates
       -tc TRUSTED_CERTIFICATES, --trusted-certificates TRUSTED_CERTIFICATES            (crawler option) trust this CA_BUNDLE file (.pem) or directory with certificates
 

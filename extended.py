@@ -89,7 +89,7 @@ def require_arguments():
     optional.add_argument("-soh", "--scan-other-hostnames", help="(crawler option) also scan pages that have another hostname than the startpoint", action="store_true")
     optional.add_argument("-sot", "--scan-other-tlds", help="(crawler option) also scan pages that have another tld than the startpoint", action="store_true")
     optional.add_argument("-md", "--max-depth", help="(crawler option) the maximum search depth (default is unlimited)", type=int)
-    optional.add_argument("-mt", "--max-threads", help="(crawler option) the maximum amount of simultaneous threads to use (default is 8)", type=int, default=8)
+    optional.add_argument("-mt", "--max-threads", help="(crawler option) the maximum amount of simultaneous threads to use (default is 20)", type=int, default=20)
     optional.add_argument("-iic", "--ignore-invalid-certificates", help="(crawler option) ignore invalid ssl certificates", action="store_true")
     optional.add_argument("-tc", "--trusted-certificates", help="(crawler option) trust this CA_BUNDLE file (.pem) or directory with certificates", type=str, default=None)
 
