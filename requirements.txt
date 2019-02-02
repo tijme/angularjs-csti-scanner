@@ -1,5 +1,5 @@
-colorlog==2.10.0
-nyawc==1.8.1
-requests==2.18.4
-requests_toolbelt==0.8.0
-selenium==3.4.3
+colorlog==4.0.2
+nyawc==1.8.2
+requests==2.21.0
+requests_toolbelt==0.9.1
+selenium==3.141.0

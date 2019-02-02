@@ -73,7 +73,7 @@ class Driver:
         self.__options.callbacks.request_on_error = self.cb_request_on_error
 
         self.__options.identity.headers.update({
-            "User-Agent": user_agent(PackageHelper.get_alias(), PackageHelper.get_version())
+            "User-Agent": "user_agent(PackageHelper.get_alias(), PackageHelper.get_version())"
         })
 
         FileLoggingHelper.set_file(self.__args.vulnerable_requests_log)
