@@ -11,12 +11,16 @@
 
    <br class="title">
 
+.. image:: https://img.shields.io/badge/donate%20via-paypal-brightgreen.svg
+   :target: https://www.paypal.me/tijmegommers/25
+   :alt: Donate via PayPal
+   
 .. image:: https://travis-ci.org/tijme/angularjs-csti-scanner.svg?branch=master
    :target: https://travis-ci.org/tijme/angularjs-csti-scanner
    :alt: Build Status
-
-.. image:: https://img.shields.io/pypi/l/acstis.svg
-   :target: https://github.com/tijme/acstis/blob/master/LICENSE.rst
+   
+.. image:: https://img.shields.io/badge/license-mit-brightgreen.svg
+   :target: https://github.com/tijme/angularjs-csti-scanner/blob/master/LICENSE.rst
    :alt: License: MIT
 
 .. raw:: html
@@ -39,7 +43,7 @@ Installation
 
 First make sure you're on `Python 2.7/3.4 <https://www.python.org/>`__ or higher. Then run the command below to install ACSTIS.
 
-``$ pip install git+https://github.com/tijme/angularjs-csti-scanner.git``
+``$ pip install https://github.com/tijme/angularjs-csti-scanner/archive/master.zip``
 
 Usage
 -----
