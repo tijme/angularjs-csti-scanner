@@ -11,11 +11,11 @@
 
    <br class="title">
 
-.. image::https://raw.finnwea.com/shield/?firstText=Donate%20via&secondText=Bunq
+.. image:: https://raw.finnwea.com/shield/?firstText=Donate%20via&secondText=Bunq
    :target: https://bunq.me/tijme/0/Automated%20client-side%20template%20injection%20(sandbox%20escape%2Fbypass)%20detection%20for%20AngularJS
    :alt: Donate via Bunq
    
-.. image:: https://raw.finnwea.com/shield/?typeKey=TravisBuildStatus&typeValue1=tijme/angularjs-csti-scanner&typeValue2=master
+.. image:: https://raw.finnwea.com/shield/?typeKey=TravisBuildStatus&typeValue1=tijme/angularjs-csti-scanner&typeValue2=master&cache=1
    :target: https://travis-ci.org/tijme/angularjs-csti-scanner
    :alt: Build Status
    
