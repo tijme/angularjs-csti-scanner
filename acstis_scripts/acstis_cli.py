@@ -118,7 +118,7 @@ def print_banner():
 | $$  | $$|  $$$$$$/|  $$$$$$/   | $$    /$$$$$$|  $$$$$$/
 |__/  |__/ \______/  \______/    |__/   |______/ \______/
 
-Version """ + PackageHelper.get_version() + """ - Copyright 2017 Tijme Gommers <tijme@finnwea.com>
+Version """ + PackageHelper.get_version() + """ - Copyright 2017 Tijme Gommers
     """)
 
 def main():

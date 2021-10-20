@@ -73,7 +73,6 @@ setup(
     },
     platforms=["any"],
     author="Tijme Gommers",
-    author_email="acstis@finnwea.com",
     license="MIT",
     url="https://github.com/tijme/angularjs-csti-scanner",
     install_requires=requirements
